@@ -1,5 +1,5 @@
-Ghouls Revenge
-==============
+Ghouls: Revenge
+===============
 
 For instructions, please see the README on GitHub:
 

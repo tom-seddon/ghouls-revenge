@@ -1,6 +1,6 @@
 # Build
 
-Instructions for building your own copy of Ghouls Revenge.
+Instructions for building your own copy of Ghouls: Revenge.
 
 ## Prerequisites
 

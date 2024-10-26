@@ -3227,8 +3227,8 @@ ed_main_menu_banner:
                 
                 .text 22,7
                 .text 129,157,131,141,10,13,129,157,131,141
-                .text 31,14,0,"GHOULS REVENGE";,31,39,0,156
-                .text 31,14,1,"GHOULS REVENGE";,31,39,1,156
+                .text 31,13,0,"GHOULS: REVENGE";,31,39,0,156
+                .text 31,13,1,"GHOULS: REVENGE";,31,39,1,156
                 .text 31,0,3
                 .byte 0
 
