@@ -45,7 +45,7 @@ build version number.)
 
 Select the level set you want from the menu. Jump to a specific set
 quickly by pressing its shortcut key, shown in the bottom right as you
-screll through.
+scroll through.
 
 Select the game mode on startup:
 
