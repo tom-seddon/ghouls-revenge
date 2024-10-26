@@ -17,7 +17,7 @@ install:
   - cd ~/tass64-code && make -j$(nproc)
   - popd
   - ps: $env:GHOULS_REVENGE_BUILD_SUFFIX = $(git log -1 --format=%cd-%h --date=format:%Y%m%d-%H%M%S $env:APPVEYOR_REPO_COMMIT)
-  - ps: $env:GHOULS_REVENGE_RELEASE_NAME = "ghouls-revenge"+$env:GHOULS_REVENGE_BUILD_SUFFIX
+  - ps: $env:GHOULS_REVENGE_RELEASE_NAME = "ghouls-revenge-"+$env:GHOULS_REVENGE_BUILD_SUFFIX
   - export GHOULS_REVENGE_VERSIONED_STEM=$(make ci_echo_versioned_stem)
   - export GHOULS_REVENGE_BUILD_SUFFIXED_STEM=$(make ci_echo_build_suffixed_stem)
 
