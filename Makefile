@@ -84,6 +84,13 @@ endif
 	$(_V)echo Build ID: $(GHOULS_TNG_BUILD_SUFFIX) >> "$(BUILD)/$$.!BOOT"
 	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(BUILD)/$$.!BOOT"
 
+# Convert README
+	$(_V)$(SHELLCMD) copy-file "src/README.txt" "$(BUILD)/README.txt"
+	$(_V)echo V$(VERSION_MAJOR).$(VERSION_MINOR) >> "$(BUILD)/README.txt"
+	$(_V)echo Build ID: $(GHOULS_TNG_BUILD_SUFFIX) >> "$(BUILD)/README.txt"
+	$(_V)$(SHELLCMD) copy-file "$(BUILD)/README.txt" "$(BUILD)/$$.README"
+	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(BUILD)/$$.README"
+
 # Create levels stuff
 	$(_V)$(MAKE) _asm PC=glevels BEEB=GLEVELS
 	$(_V)$(PYTHON) "$(BIN)/levels.py" --output "$(BUILD)/levels.generated.s65" --output-list "$(BUILD)/levels.txt"
@@ -145,7 +152,8 @@ _disk_images: _FILES:=\
 "$(BUILD)/$$.GBASD" \
 "$(BUILD)/$$.GEDMC" \
 $(_LEVELS) \
-"$(BEEB_VOLUME)/2/$$.BLANK"
+"$(BEEB_VOLUME)/2/$$.BLANK" \
+"$(BUILD)/$$.README"
 _disk_images: _SSD_OPTIONS:=--all-locked --title "GHOULS R" --opt4 3 --must-exist
 _disk_images: _ADF_OPTIONS:=--all-non-writeable --title "GHOULS REVENGE" --opt4 3 
 _disk_images:
@@ -218,7 +226,7 @@ ci_build:
 
 .PHONY:ci_zip
 ci_zip:
-	$(_V)zip -9 "$(OUTPUT_DISK_IMAGE_STEM).zip" "$(OUTPUT_DISK_IMAGE_STEM).ssd" "$(OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(OUTPUT_DISK_IMAGE_STEM).ads" "$(OUTPUT_DISK_IMAGE_STEM).adm" "$(OUTPUT_DISK_IMAGE_STEM).adl"
+	$(_V)zip -9j "$(OUTPUT_DISK_IMAGE_STEM).zip" "$(OUTPUT_DISK_IMAGE_STEM).ssd" "$(OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(OUTPUT_DISK_IMAGE_STEM).ads" "$(OUTPUT_DISK_IMAGE_STEM).adm" "$(OUTPUT_DISK_IMAGE_STEM).adl" "$(BUILD)/README.txt"
 
 # If testing ci_build locally, ci_clean will remove all the junk it
 # produces - along with anything else that matches the not very

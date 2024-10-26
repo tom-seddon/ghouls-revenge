@@ -15,10 +15,18 @@ level editor to devise fresh torments.
 The game comes as a zip file containing disk images suitable for use
 with an emulator, Gotek, or for writing to floppy disk.
 
-There are 2 DFS disk images, for BBC B/B+/Master/Compact:
+There are 2 DFS disk images, for BBC B/B+/Master/Compact, where `X.YY`
+is the version number:
 
-There are 3 ADFS disk images, for BBC Master/Compact: (apologies, but
-BBC B/B+ ADFS is not supported)
+- `ghouls-tng-vX.YY.ssd` - 80 track, single sided
+- `ghouls-tng-vX.YY.40.ssd` - 40 track, single sided
+
+There are 3 ADFS disk images, similarly named, for BBC Master/Compact:
+(apologies, but BBC B/B+ ADFS is not supported)
+
+- `ghouls-tng-vX.YY.ads` - ADFS S
+- `ghouls-tng-vX.YY.adm` - ADFS M
+- `ghouls-tng-vX.YY.adl` - ADFS L
 
 All disk images are auto-booting. Just press SHIFT+BREAK. The title
 screen will appear. Press any key for the menu, then select the option
