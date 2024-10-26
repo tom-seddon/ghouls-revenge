@@ -10,7 +10,7 @@ VERSION_MINOR:=07
 
 # 20241015-000458-90730ec
 # local
-GHOULS_TNG_BUILD_SUFFIX?=local-build
+GHOULS_REVENGE_BUILD_SUFFIX?=local-build
 
 ##########################################################################
 ##########################################################################
@@ -46,14 +46,14 @@ BIN:=$(PWD)/bin
 BUILD:=$(PWD)/build
 
 # Where the BeebLink volume is (absolute path).
-BEEB_VOLUME:=$(PWD)/beeb/ghouls-tng
+BEEB_VOLUME:=$(PWD)/beeb/ghouls-revenge
 
 # Where final Beeb-visible build output goes (absolute path).
 BEEB_OUTPUT:=$(BEEB_VOLUME)/y
 BEEB_OUTPUT_2:=$(BEEB_VOLUME)/z
 
 # Name stem for disk images. Extension (etc.) appended.
-OUTPUT_DISK_IMAGE_STEM?=ghouls-tng
+OUTPUT_DISK_IMAGE_STEM?=ghouls-revenge
 
 ifeq ($(OS),Windows_NT)
 TASS:=$(PWD)/bin/64tass.exe
@@ -81,13 +81,13 @@ endif
 # Convert !BOOT
 	$(_V)echo *RUN GRUN > "$(BUILD)/$$.!BOOT"
 	$(_V)echo V$(VERSION_MAJOR).$(VERSION_MINOR) >> "$(BUILD)/$$.!BOOT"
-	$(_V)echo Build ID: $(GHOULS_TNG_BUILD_SUFFIX) >> "$(BUILD)/$$.!BOOT"
+	$(_V)echo Build ID: $(GHOULS_REVENGE_BUILD_SUFFIX) >> "$(BUILD)/$$.!BOOT"
 	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(BUILD)/$$.!BOOT"
 
 # Convert README
 	$(_V)$(SHELLCMD) copy-file "src/README.txt" "$(BUILD)/README.txt"
 	$(_V)echo V$(VERSION_MAJOR).$(VERSION_MINOR) >> "$(BUILD)/README.txt"
-	$(_V)echo Build ID: $(GHOULS_TNG_BUILD_SUFFIX) >> "$(BUILD)/README.txt"
+	$(_V)echo Build ID: $(GHOULS_REVENGE_BUILD_SUFFIX) >> "$(BUILD)/README.txt"
 	$(_V)$(SHELLCMD) copy-file "$(BUILD)/README.txt" "$(BUILD)/$$.README"
 	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(BUILD)/$$.README"
 
@@ -99,7 +99,7 @@ endif
 	$(_V)$(MAKE) _asm PC=gmc BEEB=GMC TASS_EXTRA_ARGS=-Deditor=false
 	$(_V)$(MAKE) _asm PC=gmc BEEB=GEDMC TASS_EXTRA_ARGS=-Deditor=true
 	$(_V)$(MAKE) _asm PC=gmenu BEEB=GMENU
-	$(_V)$(MAKE) _asm PC=grun BEEB=GRUN "TASS_EXTRA_ARGS=-Dversion_major=\'$(VERSION_MAJOR)\' -Dversion_minor=\'$(VERSION_MINOR)\' -Dbuild_suffix=\'$(GHOULS_TNG_BUILD_SUFFIX)\'"
+	$(_V)$(MAKE) _asm PC=grun BEEB=GRUN "TASS_EXTRA_ARGS=-Dversion_major=\'$(VERSION_MAJOR)\' -Dversion_minor=\'$(VERSION_MINOR)\' -Dbuild_suffix=\'$(GHOULS_REVENGE_BUILD_SUFFIX)\'"
 	$(_V)$(MAKE) _asm PC=gdummy BEEB=GDUMMY
 
 # Compressed screen stuff
@@ -238,11 +238,11 @@ ci_clean:
 
 .PHONY:ci_echo_versioned_stem
 ci_echo_versioned_stem:
-	@echo ghouls-tng-v$(VERSION_MAJOR).$(VERSION_MINOR)
+	@echo $(OUTPUT_DISK_IMAGE_STEM)-v$(VERSION_MAJOR).$(VERSION_MINOR)
 
 .PHONY:ci_echo_build_suffixed_stem
 ci_echo_build_suffixed_stem:
-	@echo ghouls-tng-$(GHOULS_TNG_BUILD_SUFFIX)
+	@echo $(OUTPUT_DISK_IMAGE_STEM)-$(GHOULS_REVENGE_BUILD_SUFFIX)
 
 ##########################################################################
 ##########################################################################
@@ -253,7 +253,7 @@ _tom_laptop: CONFIG=B/Acorn 1770
 _tom_laptop:
 	$(MAKE) build
 	-curl --connect-timeout 0.25 --silent -G 'http://localhost:48075/reset/b2' --data-urlencode "config=$(CONFIG)"
-	-curl --connect-timeout 0.25 --silent -H 'Content-Type:application/binary' --upload-file 'ghouls-tng.ssd' 'http://localhost:48075/run/b2?name=ghouls-tng.ssd'
+	-curl --connect-timeout 0.25 --silent -H 'Content-Type:application/binary' --upload-file '$(OUTPUT_DISK_IMAGE_STEM).ssd' 'http://localhost:48075/run/b2?name=$(OUTPUT_DISK_IMAGE_STEM).ssd'
 
 .PHONY:_tom_windows_laptop
 _tom_windows_laptop: CONFIG=B/Acorn 1770 + BeebLink

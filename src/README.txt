@@ -3,11 +3,11 @@ Ghouls Revenge
 
 For instructions, please see the README on GitHub:
 
-https://github.com/tom-seddon/ghouls-tng/blob/main/docs/ghouls-revenge.md
+https://github.com/tom-seddon/ghouls-revenge/blob/main/docs/ghouls-revenge.md
 
 Buildable code can be found on GitHub too:
 
-https://github.com/tom-seddon/ghouls-tng
+https://github.com/tom-seddon/ghouls-revenge
 
 Credits
 =======
