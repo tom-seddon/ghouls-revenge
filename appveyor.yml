@@ -16,23 +16,23 @@ install:
   - svn checkout -r 2980 https://svn.code.sf.net/p/tass64/code/trunk tass64-code
   - cd ~/tass64-code && make -j$(nproc)
   - popd
-  - ps: $env:GHOULS_TNG_BUILD_SUFFIX = $(git log -1 --format=%cd-%h --date=format:%Y%m%d-%H%M%S $env:APPVEYOR_REPO_COMMIT)
-  - ps: $env:GHOULS_TNG_RELEASE_NAME = "ghouls-tng-"+$env:GHOULS_TNG_BUILD_SUFFIX
-  - export GHOULS_TNG_VERSIONED_STEM=$(make ci_echo_versioned_stem)
-  - export GHOULS_TNG_BUILD_SUFFIXED_STEM=$(make ci_echo_build_suffixed_stem)
+  - ps: $env:GHOULS_REVENGE_BUILD_SUFFIX = $(git log -1 --format=%cd-%h --date=format:%Y%m%d-%H%M%S $env:APPVEYOR_REPO_COMMIT)
+  - ps: $env:GHOULS_REVENGE_RELEASE_NAME = "ghouls-revenge"+$env:GHOULS_REVENGE_BUILD_SUFFIX
+  - export GHOULS_REVENGE_VERSIONED_STEM=$(make ci_echo_versioned_stem)
+  - export GHOULS_REVENGE_BUILD_SUFFIXED_STEM=$(make ci_echo_build_suffixed_stem)
 
 build_script:
   - ps: make ci_build VERBOSE=1 TASS=$HOME/tass64-code/64tass
   - env
     
 artifacts:
-  - path: $(GHOULS_TNG_VERSIONED_STEM).zip
+  - path: $(GHOULS_REVENGE_VERSIONED_STEM).zip
     name: versioned-zip
-  - path: $(GHOULS_TNG_BUILD_SUFFIXED_STEM).zip
+  - path: $(GHOULS_REVENGE_BUILD_SUFFIXED_STEM).zip
     name: build-suffixed-zip
 
 deploy:
-  - release: $(GHOULS_TNG_RELEASE_NAME)
+  - release: $(GHOULS_REVENGE_RELEASE_NAME)
     description: |
       Details to follow
       
