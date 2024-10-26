@@ -3,7 +3,7 @@
 When first loaded, the level editor shows its main menu, with the
 default Ghouls level set loaded.
 
-![editor main menu](./editor.main_menu.png)
+![editor main menu](./images/editor.main_menu.png)
 
 From the level editor main menu, the following items are available:
 
@@ -54,7 +54,7 @@ From the level editor main menu, the following items are available:
 When editing, you'll see the current level displayed in the top half
 of the screen and a status area at the bottom.
 
-![editor screen](./editor.editor.png)
+![editor screen](./images/editor.editor.png)
 
 To test the level shown, press `TAB`. You get one life, and you'll be
 taken back to edit mode if you die or complete the level. (You can
@@ -85,38 +85,38 @@ always redrawing everything perfectly. Press `R` to redraw the level.)
 
 ## Object types
 
-![ground](./objects.ground.png)
+![ground](./images/objects.ground.png)
 
 Ground, coloured according to the level-specific colour. The different
 types are purely cosmetic and all behave the same way.
 
-![spikes](./objects.spikes.png)
+![spikes](./images/objects.spikes.png)
 
 Deadly spikes. There are also 4 half-spike objects, also deadly, that
 you can use.
 
-![springs](./objects.springs.png)
+![springs](./images/objects.springs.png)
 
 Springs. Both types behave the same way, but the half height one only
 uses up 1 row.
 
-![edibles](./objects.dots.png)
+![edibles](./images/objects.dots.png)
 
 Edibles. To be edible while moving these need to be positioned at
 player head height, i.e., with a 1 row gap between ground and edible.
 
 There are also 2 individual edibles, should you need them.
 
-![power pill](./objects.pill.png)
+![power pill](./images/objects.pill.png)
 
 Power pill. As with the edibles, this must be positioned at head
 height to be edible while moving.
 
-![red block](./objects.red_block.png)
+![red block](./images/objects.red_block.png)
 
 A general-purpose deadly red square, filling an entire cell.
 
-![decorative player](./objects.player.png)
+![decorative player](./images/objects.player.png)
 
 A purely decorative player. (To set the player's start position, see
 the Player start position section below.)
@@ -124,7 +124,7 @@ the Player start position section below.)
 The decorative players are indistinguishable from the player start
 position in the editor and you just have to remember which is which.
 
-![treasure](./objects.treasure.png)
+![treasure](./images/objects.treasure.png)
 
 Decorative treasure. (The decorative treasure is purely decorative,
 and plays no specific part in the level end position. See the Level
@@ -134,7 +134,7 @@ The bottom half treasure appears as the full size treasure in game,
 but as it's a shorter object you can position it in the top row of the
 screen.
 
-![spiders](./objects.spiders.png)
+![spiders](./images/objects.spiders.png)
 
 Spiders. The masked/dimmed spider only appears when playing with 2+
 ghosts, i.e., 2nd or subsequent time through the levels in classic or
@@ -145,7 +145,7 @@ There are multiple speeds available. Speed 0 is unusually slow.
 Spiders can't be placed right at the left or right edges of the map,
 as they would overlap the level border.
 
-![moving platform](./objects.moving_platform.png)
+![moving platform](./images/objects.moving_platform.png)
 
 Moving platform. 
 
@@ -154,7 +154,7 @@ There are multiple speeds available. Speed 0 is unusually slow.
 Moving platforms can't be placed right at the left or right edges of
 the map, as they would overlap the level border.
 
-![moving floor](./objects.moving_floor.png)
+![moving floor](./images/objects.moving_floor.png)
 
 Moving floor.
 
@@ -163,12 +163,12 @@ left.
 
 The moving floor can't be placed at the left edge of the map.
 
-![goal](./objects.goal.png)
+![goal](./images/objects.goal.png)
 
 Goal. If the player steps on this, the level ends. See the Level goal
 position section.
 
-![red line](./objects.red_line.png)
+![red line](./images/objects.red_line.png)
 
 A general purpose vertical red line. There are two, one aligned with
 the left edge of the cell and one with the right. This is used as the rope for the default level goal.
