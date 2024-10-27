@@ -128,14 +128,15 @@ def main2(options):
     level('beeb/ghouls-revenge/2/$.HEIGHTS','Kieran','Elevated')
     level('beeb/ghouls-revenge/2/$.ALTERN','Kieran','Indescribable')
     level('beeb/ghouls-revenge/2/$.GETOUT','Kieran','Extractive')
-    level('beeb/ghouls-revenge/2/$.MASH','Dave','Let\'s Party')
+    level('beeb/ghouls-revenge/2/$.CAVES','Kieran','Subterranean')
     level('beeb/ghouls-revenge/2/$.EGYPT','Stew','Ancient')
     level('beeb/ghouls-revenge/2/$.MARS','Stew','Extraplanetary')
-    level('beeb/ghouls-revenge/2/$.CAVES','Kieran','Subterranean')
     level('beeb/ghouls-revenge/2/$.BOTNST','VectorEyes','Miniscule')
     level('beeb/ghouls-revenge/2/$.COLLECT','VectorEyes','Ineffable')
+    level('beeb/ghouls-revenge/2/$.GLITCHS','VectorEyes','Unexpected')
+    level('beeb/ghouls-revenge/2/$.MASH','Dave','Frightening')
+    level('beeb/ghouls-revenge/2/$.MORE','Dave','Killer')
     level('beeb/ghouls-revenge/2/$.FACILIT','Tom','Trust No-one')
-    level('beeb/ghouls-revenge/2/$.MORE','Dave','More')
     level('beeb/ghouls-revenge/2/$.BSIDES','Kieran','Remixed')
 
     # Custom levels
