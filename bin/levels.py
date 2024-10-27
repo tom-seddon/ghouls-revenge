@@ -41,115 +41,6 @@ Level=collections.namedtuple('Level','path bbc_file_name title designer difficul
 ##########################################################################
 ##########################################################################
 
-# didn't end up doing this...
-
-# class Screen:
-#     def __init__(self):
-#         self._bytes=bytearray()
-#         for i in range(1024):self._bytes.append(32)
-#         self._x=None
-#         self._y=None
-
-#     def put(self,x,y,c):
-#         assert x>=0 and x<40,x
-#         assert y>=0 and y<25,y
-#         self._bytes[y*40+x]=c
-
-#     def xy(self,x,y):
-#         assert x>=0 and x<40,x
-#         assert y>=0 and y<25,y
-#         self._x=x
-#         self._y=y
-
-#     def p(self,*args):
-#         def store(b):
-#             assert self._x>=0 and self._x<40
-#             assert self._y>=0 and self._y<25
-#             assert b>=0 and b<256
-#             self._bytes[self._y*40+self._x]=b
-#             self._x+=1
-        
-#         for arg in args:
-#             if isinstance(arg,int):
-#                 if ((arg>=129 and arg<=135) or
-#                     (arg>=145 and arg<=151) or
-#                     arg==141):
-#                     store(arg)
-#                 else:assert False,(arg,)
-#             elif isinstance(arg,bytes)or isinstance(arg,bytearray):
-#                 for b in arg:store(b)
-#             elif isinstance(arg,str):
-#                 for b in arg:store(ord(b))
-#             else:assert False,(arg,type(arg))
-
-#     def dh(self):self.p(bytes([141]))
-#     def tc(self,n):self._colour(n,129)
-#     def gc(self,n):self._colour(n,145)
-#     def _colour(self,n,base):
-#         assert n>=1 and n<=7
-#         self.p(bytes([base+(n-1)]))
-
-#     def get_bytes(self):return bytes(self._bytes)
-
-# def print_standard_Level_screen_stuff(sc):
-#     for i in range(2):
-#         y=0+i
-#         sc.xy(11,y)
-#         sc.p(141,129+y,'GHOULS: REVENGE')
-#     sc.xy(14,2)
-#     sc.p(147,'##,,ppp,,##')
-
-#     sc.xy(6,4)
-#     sc.p(134,'Use',135,'[',134,'and',135,']',134,'to select levels')
-
-#     sc.xy(9,5)
-#     sc.p(134,'Press',135,'RETURN',134,'to select')
-
-#     for i in range(2):
-#         y=8+i
-#         sc.xy(0,y)
-#         sc.p(141,131,'[')
-#         sc.xy(35,y)
-#         sc.p(131,']')
-
-# def print_level_title(sc,t):
-#     for i in range(2):
-#         sc.xy(20-len(t)//2-1,8+i)
-#         sc.p(130,t)
-
-# def get_level_screen(level):
-#     sc=Screen()
-#     print_standard_Level_screen_stuff(sc)
-
-#     for i,b in enumerate(level.instr):sc.put(i%40,12+i//40,b)
-
-#     sc.xy(0,19)
-#     sc.p(134,'Designer:',133,level.designer)
-
-#     sc.xy(0,20)
-#     sc.p(134,'Difficulty:',133,level.difficulty)
-
-#     print_level_title(sc,level.title)
-
-#     return sc.get_bytes()
-
-def get_custom_level_screen():
-    sc=Screen()
-    print_standard_Level_screen_stuff(sc)
-    print_level_title(sc,'*YOUR LEVELS HERE*')
-
-    lines=textwrap.wrap('Load levels designed in the editor. Infuriate your friends. Infuriate your enemies. Infuriate yourself.',39)
-
-    for i,line in enumerate(lines):
-        sc.xy(0,12+i)
-        sc.p(134,line)
-
-    return sc.get_bytes()
-    
-
-##########################################################################
-##########################################################################
-
 def main2(options):
     # values exclude the trailing 13 included for convenient use with
     # BASIC's $ operator. 
@@ -328,13 +219,6 @@ def main2(options):
         if options.output_path=='-':write_output(sys.stdout)
         else:
             with open(options.output_path,'wt') as f:write_output(f)
-
-    # output=bytearray()
-    # output+=get_custom_level_screen()
-    # for level in levels:output+=get_level_screen(level)
-
-    # if options.output_info_path is not None:
-    #     with open(options.output_info_path,'wb') as f:f.write(output)
 
     if options.output_list_path is not None:
         with open(options.output_list_path,'wt') as f:
