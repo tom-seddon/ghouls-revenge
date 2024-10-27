@@ -17,7 +17,10 @@ GHOULS_REVENGE_BUILD_SUFFIX?=local-build
 
 ifeq ($(OS),Windows_NT)
 PYTHON:=py -3
+TASS:=$(PWD)/bin/64tass.exe
+UNAME:=Windows_NT
 else
+UNAME:=$(shell uname -s)
 PYTHON:=/usr/bin/python3
 TASS:=64tass
 endif
@@ -56,7 +59,6 @@ BEEB_OUTPUT_2:=$(BEEB_VOLUME)/z
 OUTPUT_DISK_IMAGE_STEM?=ghouls-revenge
 
 ifeq ($(OS),Windows_NT)
-TASS:=$(PWD)/bin/64tass.exe
 BASICTOOL:=$(PWD)/bin/basictool.exe
 ZX02:=$(PWD)/bin/zx02.exe
 else
@@ -250,8 +252,11 @@ ci_echo_build_suffixed_stem:
 .PHONY:_tom_laptop
 # _tom_laptop: CONFIG=Master 128 (MOS 3.20)
 _tom_laptop: CONFIG=B/Acorn 1770
+ifeq ($(UNAME),Darwin)
+_tom_laptop: export CC=cc
+endif
 _tom_laptop:
-	$(MAKE) build
+	$(MAKE) --no-print-directory build
 	-curl --connect-timeout 0.25 --silent -G 'http://localhost:48075/reset/b2' --data-urlencode "config=$(CONFIG)"
 	-curl --connect-timeout 0.25 --silent -H 'Content-Type:application/binary' --upload-file '$(OUTPUT_DISK_IMAGE_STEM).ssd' 'http://localhost:48075/run/b2?name=$(OUTPUT_DISK_IMAGE_STEM).ssd'
 
