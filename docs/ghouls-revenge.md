@@ -1,13 +1,14 @@
 # Ghouls: Revenge
 
 It's been 40 years since the deadly haunted mansion. What horrors has
-the ghost been cooking up? Now, revisit the mansion - and 14 exciting
+the ghost been cooking up? Now, revisit the mansion - and 15 exciting
 new 4-level situations.
 
 But beware! Wherever your adventures take you, the ghost is never far
-behind! And... don't expect it to be easy.
+behind! And... don't expect it to be easy. These levels have been
+constructed deliberately to test you.
 
-Once the ghost is defeated, or if you admit defeat yourself, use the
+Once the ghost is defeated - or if you admit defeat yourself - use the
 level editor to devise fresh torments.
 
 # Running the game
@@ -50,16 +51,15 @@ scroll through.
 Select the game mode on startup:
 
 - `1` - Classic: 4 lives, game ends if you run out
-- `2` - Infinite Lives: as many deaths as you want, but the game
-  ends if the bonus timer falls to 0. The bonus timer is reset on each
-  new level
-- `3` - Time Attack: get through each level as quickly as you can!
-  The best score is recorded
+- `2` - Infinite Lives: as many deaths as you want, but the game ends
+  if the bonus timer falls to 0. The bonus timer is reset on each new
+  level
+- `3` - Time Attack: get through each level as quickly as you can! The
+  fastest time is recorded
 
 There are in-game instructions giving a brief overview of how to play,
-and the keys to use.
-
-The game objects list may not be _quite_ complete...
+and the keys to use. (There is also a game object list - for advisory
+purposes only. There may be the odd surprise in store.)
 
 # Level editor
 
