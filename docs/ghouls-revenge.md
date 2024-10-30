@@ -95,3 +95,8 @@ Level design and testing:
 
 Title screen: [Dethmunk](https://www.stardot.org.uk/forums/memberlist.php?mode=viewprofile&u=10689)
 
+Thanks are also due to the developers of the following tools:
+
+- [64tass](https://tass64.sourceforge.net/) - assembler
+- [basictool](https://github.com/ZornsLemma/basictool) - BBC BASIC utility
+- [zx02](https://github.com/dmsc/zx02) - file compressor
