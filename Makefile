@@ -17,12 +17,10 @@ GHOULS_REVENGE_BUILD_SUFFIX?=local-build
 
 ifeq ($(OS),Windows_NT)
 PYTHON:=py -3
-TASS:=$(PWD)/bin/64tass.exe
 UNAME:=Windows_NT
 else
 UNAME:=$(shell uname -s)
 PYTHON:=/usr/bin/python3
-TASS:=64tass
 endif
 
 ##########################################################################
@@ -59,9 +57,11 @@ BEEB_OUTPUT_2:=$(BEEB_VOLUME)/z
 OUTPUT_DISK_IMAGE_STEM?=ghouls-revenge
 
 ifeq ($(OS),Windows_NT)
+TASS:=$(PWD)/bin/64tass.exe
 BASICTOOL:=$(PWD)/bin/basictool.exe
 ZX02:=$(PWD)/bin/zx02.exe
 else
+TASS:=64tass
 BASICTOOL:=$(PWD)/submodules/basictool/basictool
 ZX02:=$(PWD)/submodules/zx02/build/zx02
 endif
