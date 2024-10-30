@@ -13,11 +13,14 @@ level editor to devise fresh torments.
 
 # Running the game
 
+Download the zip file from the Ghouls: Revenge page:
+https://bitshifters.github.io/posts/prods/bs-ghouls-revenge.html
+
 The game comes as a zip file containing disk images suitable for use
 with an emulator, Gotek, or for writing to floppy disk.
 
-There are 2 DFS disk images, for BBC B/B+/Master/Compact, where `X.YY`
-is the version number:
+There are 2 DFS disk images, for BBC B/B+/Master, where `X.YY` is the
+version number:
 
 - `ghouls-revenge-vX.YY.ssd` - 80 track, single sided
 - `ghouls-revenge-vX.YY.40.ssd` - 40 track, single sided
