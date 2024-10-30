@@ -5,8 +5,8 @@
 # version is 2 digits. Leading 0s are inserted as required.
 #
 # So major=0 minor=1 (say) means version 0.01.
-VERSION_MAJOR:=0
-VERSION_MINOR:=10
+VERSION_MAJOR:=1
+VERSION_MINOR:=00
 
 # 20241015-000458-90730ec
 # local
