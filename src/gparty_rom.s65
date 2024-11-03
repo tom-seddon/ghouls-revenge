@@ -1,0 +1,9 @@
+                .include "gcommon.s65"
+
+                *=$8000
+
+                .emit_rom_header 0,svc,0,"Ghouls Party",0,""
+
+svc:
+                rts
+                

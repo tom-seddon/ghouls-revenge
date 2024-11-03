@@ -46,15 +46,20 @@ BIN:=$(PWD)/bin
 # Where intermediate build output goes (absolute path).
 BUILD:=$(PWD)/build
 
+# Too late, I found I'd need more than one !BOOT, etc...
+GP_BUILD:=$(PWD)/build/party
+
 # Where the BeebLink volume is (absolute path).
 BEEB_VOLUME:=$(PWD)/beeb/ghouls-revenge
 
 # Where final Beeb-visible build output goes (absolute path).
+BEEB_GP_OUTPUT:=$(BEEB_VOLUME)/x
 BEEB_OUTPUT:=$(BEEB_VOLUME)/y
 BEEB_OUTPUT_2:=$(BEEB_VOLUME)/z
 
 # Name stem for disk images. Extension (etc.) appended.
 OUTPUT_DISK_IMAGE_STEM?=ghouls-revenge
+GP_OUTPUT_DISK_IMAGE_STEM?=ghouls-party
 
 ifeq ($(OS),Windows_NT)
 TASS:=$(PWD)/bin/64tass.exe
@@ -113,11 +118,6 @@ endif
 	$(_V)$(PYTHON) $(BIN)/bbpp.py -Ddebug=True --asm-symbols "$(BUILD)/GMC.symbols" "" -o "$(BUILD)/gbasd.bas" "src/ghouls.bas"
 	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gbasd.bas" "$(BUILD)/$$.GBASD"
 
-# Print some info
-	$(_V)$(SHELLCMD) blank-line
-	$(_V)$(PYTHON) "$(BIN)/budgets.py" "$(BUILD)" "$(BUILD)"
-	$(_V)$(SHELLCMD) blank-line
-
 # Build disk images. Re-run make to ensure the $(shell cat gets re-evaluated.
 	$(_V)$(MAKE) _disk_images
 
@@ -133,6 +133,32 @@ endif
 	$(_V)$(SHELLCMD) copy-file "$(OUTPUT_DISK_IMAGE_STEM).adl" "$(BEEB_OUTPUT_2)/L.GHOULSA"
 	$(_V)$(SHELLCMD) copy-file "$(OUTPUT_DISK_IMAGE_STEM).adm" "$(BEEB_OUTPUT_2)/M.GHOULSA"
 	$(_V)$(SHELLCMD) copy-file "$(OUTPUT_DISK_IMAGE_STEM).ads" "$(BEEB_OUTPUT_2)/S.GHOULSA"
+
+# Ghouls Party
+	$(_V)$(MAKE) _asm PC=gparty_rom BEEB=ROMPREFIX
+	$(_V)$(MAKE) _party_stuff
+	$(_V)$(MAKE) _asm PC=gmc BEEB=GPMC "TASS_EXTRA_ARGS=-Deditor=false -Dparty=true"
+	$(_V)$(SHELLCMD) copy-file "src/gparty_boot.txt" "$(GP_BUILD)/$$.!BOOT"
+	$(_V)echo V$(VERSION_MAJOR).$(VERSION_MINOR) >> "$(GP_BUILD)/$$.!BOOT"
+	$(_V)echo Build ID: $(GHOULS_REVENGE_BUILD_SUFFIX) >> "$(GP_BUILD)/$$.!BOOT"
+	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(GP_BUILD)/$$.!BOOT"
+	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/gpmc.symbols" "" -o "$(GP_BUILD)/gparty.bas" "src/gparty.bas"
+	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(GP_BUILD)/gparty.bas" "$(GP_BUILD)/$$.GPARTY"
+	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" --title "GHOULS P" --opt4 3 --must-exist "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPARTY0" "$(GP_BUILD)/$$.GPARTY" "$(BUILD)/$$.GPMC"
+
+# Print some info
+	$(_V)$(SHELLCMD) blank-line
+	$(_V)$(PYTHON) "$(BIN)/budgets.py" "$(BUILD)" "$(BUILD)"
+	$(_V)$(SHELLCMD) blank-line
+
+##########################################################################
+##########################################################################
+
+.PHONY:_party_stuff
+# same setup as for _disk_images
+_party_stuff: _LEVELS:=$(shell $(SHELLCMD) cat -f $(BUILD)/levels.txt)
+_party_stuff:
+	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --rom-prefix "$(BUILD)/$$.ROMPREFIX" --s65-output "$(BUILD)/party_levels.generated.s65" $(_LEVELS)
 
 ##########################################################################
 ##########################################################################
@@ -193,6 +219,7 @@ _asm:
 _output_folders:
 	$(_V)$(SHELLCMD) mkdir "$(BUILD)"
 	$(_V)$(SHELLCMD) mkdir "$(BEEB_OUTPUT_2)"
+	$(_V)$(SHELLCMD) mkdir "$(GP_BUILD)"
 
 ##########################################################################
 ##########################################################################
@@ -258,7 +285,9 @@ endif
 _tom_laptop:
 	$(MAKE) --no-print-directory build
 	-curl --connect-timeout 0.25 --silent -G 'http://localhost:48075/reset/b2' --data-urlencode "config=$(CONFIG)"
-	-curl --connect-timeout 0.25 --silent -H 'Content-Type:application/binary' --upload-file '$(OUTPUT_DISK_IMAGE_STEM).ssd' 'http://localhost:48075/run/b2?name=$(OUTPUT_DISK_IMAGE_STEM).ssd'
+#	-curl --connect-timeout 0.25 --silent -H 'Content-Type:application/binary' --upload-file '$(OUTPUT_DISK_IMAGE_STEM).ssd' 'http://localhost:48075/run/b2?name=$(OUTPUT_DISK_IMAGE_STEM).ssd'
+	-curl --connect-timeout 0.25 --silent -H 'Content-Type:application/binary' --upload-file '$(GP_OUTPUT_DISK_IMAGE_STEM).ssd' 'http://localhost:48075/run/b2?name=$(GP_OUTPUT_DISK_IMAGE_STEM).ssd'
+
 
 .PHONY:_tom_windows_laptop
 _tom_windows_laptop: CONFIG=B/Acorn 1770 + BeebLink

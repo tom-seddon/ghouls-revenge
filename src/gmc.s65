@@ -62,8 +62,15 @@ L0085=$85
 level_draw_screen_addr=$86
 level_draw_sprite_src=$88
 level_draw_sprite_dest=$8a
-
 digits_addr=$8c
+
+                .if party
+                *=$86
+.dsection zx02_zp
+
+gp_level_addr=$86
+
+                .endif
 
 ;-------------------------------------------------------------------------
 
@@ -7214,6 +7221,105 @@ ed_random_ghost_addr_table: .block
                 
 ;-------------------------------------------------------------------------
                 .endif          ;editor
+;-------------------------------------------------------------------------
+
+                .if party
+
+                .include "../build/party_levels.generated.s65"
+                .include "zx02-optim.s65"
+
+zx02_comp_data=0                ; filled in separately
+zx02_out_addr=level_addr+size(LevelData.name)
+
+                .dsection zx02_code
+
+gp_rom_bank:
+                .byte 13
+gp_old_rom_bank:
+                .byte 0
+
+gp_select_gp_rom:
+                lda $f4
+                sta gp_old_rom_bank
+                lda gp_rom_bank
+gp_select_rom:
+                sta $f4
+                sta $fe30
+                rts
+
+gp_select_old_rom:
+                lda gp_old_rom_bank
+                jmp gp_select_rom
+
+; Y = level index
+; X = max # chars to print (will space pad if required)
+gp_print_level_name: .block
+                jsr gp_select_gp_rom
+                
+                txa
+                beq done
+
+                lda level_addrs_lo,y
+                sta gp_level_addr+0
+                lda level_addrs_hi,y
+                sta gp_level_addr+1
+
+                ldy #0
+loop:
+                lda (gp_level_addr),y
+                cmp #13
+                beq done
+                jsr oswrch
+                dex
+                beq done
+                iny
+                cpy #size(LevelData.name)
+                bne loop
+
+done:
+                jsr gp_select_old_rom
+
+                cpx #0
+                beq done2
+
+loop2:
+                lda #' '
+                jsr oswrch
+                dex
+                bne loop2
+
+done2:
+                rts
+                .endblock
+
+; X = level index
+gp_unpack_level: .block
+                lda level_addrs_lo,x
+                sta gp_level_addr+0
+                lda level_addrs_hi,x
+                sta gp_level_addr+1
+                
+                ; copy uncompressed level name
+                ldy #size(LevelData.name)-1
+loop:
+                lda (gp_level_addr),y
+                sta level_addr,y
+                dey
+                bpl loop
+
+                clc
+                lda gp_level_addr+0
+                adc #size(LevelData.name)
+                sta zx0_ini_block+1 ; mild ugh
+                lda gp_level_addr+1
+                adc #0
+                sta zx0_ini_block+2 ; mild ugh
+                jmp full_decomp
+
+                .endblock
+                
+                .endif
+
 ;-------------------------------------------------------------------------
 
                 .if editor

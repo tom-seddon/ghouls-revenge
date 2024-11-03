@@ -32,6 +32,7 @@ def main2(options):
 
     gmc_symbols=load_symbol_file(os.path.join(options.build_folder,'GMC.symbols'))
     gedmc_symbols=load_symbol_file(os.path.join(options.build_folder,'GEDMC.symbols'))
+    gpmc_symbols=load_symbol_file(os.path.join(options.build_folder,'GPMC.symbols'))
     
     def budget(name,begin,end):
         nonlocal any_bad
@@ -60,6 +61,8 @@ def main2(options):
     budget('$.GEDMC',gedmc_symbols.gedmc_org,gedmc_symbols.gedmc_org+gedmc_symbols.max_gedmc_pages*256)
     budget('$.GLEVELS',gmc_symbols.levels_org,gmc_symbols.himem)
     budget('$.GRUN',0x1900,gmc_symbols.gedmc_levels_org)
+    budget('$.GPARTY0',0x8000,0xc000)
+    budget('$.GPMC',gpmc_symbols.gmc_org,gpmc_symbols.gmc_top)
 
     if any_bad: sys.exit(1)
 

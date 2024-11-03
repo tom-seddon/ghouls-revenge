@@ -517,7 +517,7 @@ and decreases as you ascend. A level design question.
 
 8*20+1 = 161 bytes for ending text
 
-30+1 = 31 bytes for level name
+30+1 = 31 bytes for level set name
 
 201+161+31=393
 
@@ -967,5 +967,93 @@ Planned workflow.
 
 Looks like this has to be a double push as AppVeyor only looks at the
 head revision at the time of checking.
+
+* Ghouls Party
+
+Time attack only party mode with persistent high score table. The
+ghost is on holiday. Time to tip some power pills into the punch bowl
+and have a Ghouls Party!
+
+High score table data should be small enough to fit on a single
+density track. Ideally, store data on track 0/1 so the save is as
+quick as possible. (Put placeholder data in appropriate place as part
+of build process.)
+
+=*SAVE= times to empty DFS disk:
+
+| # bytes | Seconds | Notes            |
+|---------+---------+------------------|
+| $0      |     1.9 |                  |
+| $100    |    2.12 |                  |
+| $700    |    2.23 |                  |
+| $800    |    2.25 | entirely track 0 |
+| $900    |    2.33 |                  |
+| $a00    |    2.35 |                  |
+| $1000   |    2.47 |                  |
+
+So approx linear in number of bytes, with a bump due to seek to track
+1 then back to track 0 for next save - but which doesn't muck things
+up too much.
+
+All level sets accessible when playing. Store in sideways RAM. Only
+one levels'-worth of data needs to be resident at a time, so the main
+RAM requirements are much reduced. Target PAGE=&1200, covering B/B+ on
+NFS as well (as per Ken Lowe's comment on stardot).
+
+Level set configured at build time on PC side, so: options! Don't need
+the instructions text or end of game text. 575 bytes per level, plus
+31 bytes per 4 levels for the level set name.
+
+So 0x8fc per level set. This is actually quite good because
+16384/0x900=7 rem 256, so plenty of space for a proper ROM header.
+
+0x1f for the name can go in metadata somewhere. Build time
+configuration means this can all get baked into the disk image.
+
+High score table data to be linked to level set via...??? Should be
+some combination of file name and hash of contents (which can be done
+at build time, so just an arbitrary token from the BBC side). This is
+going to bump up the high score data size, but hopefully it'll be
+ok...
+
+Current levels: 64 total, so 16 sets. 3 sideways banks required.
+
+Suppose 64 is then the max? 16 sets per party? What does the high
+score data look like?
+
+High score data per level:
+
+- Time taken :: 2 bytes, BCD, seconds+hundredths, as currently?
+- Name :: 2 bytes would allow 3 chars from a 40 char set
+
+64*4=256
+
+High score data per level set:
+
+- Name :: 7 chars (Ghouls Party is DFS friendly, so you are not
+  allowed to use more)
+
+16*7=112
+
+Should really have some hash data per level. Would 4 bytes of the
+SHA256 be enough? The point here would be to get a y/n for the level
+data matching exactly. The level set name and level index would do the
+rest. (Take advantage of PC side processing. Don't just hash the bytes
+directly. Mask out anything that's irrelevant for time attack mode.)
+
+- Hash data :: 4 bytes per level (??)
+
+16*4=256
+
+The point of the matching up process would be to have some kind of
+score data merging tool. Worth doing? Could save a lot of bother if
+not...
+
+** High score screen
+                      |
+: 0123456789012345678901234567890123456789
+:  LEVEL SET NAME-----
+:  1. XX.XX XYZ 2. XX.XX XYZ
+:  3. XX.XX XYZ 4. XX.XX XYZ
 
 * EOF

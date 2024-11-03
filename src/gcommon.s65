@@ -2,11 +2,11 @@
 
                 .weak
 editor=false
+party=false
                 .endweak
 
 ;-------------------------------------------------------------------------
 
-max_gmc_pages=18
 level_data_pages=11
 
 himem=$5800
@@ -22,15 +22,30 @@ max_gedmc_pages=>(himem-gedmc_org)
 ; Importing only happens in Mode 7. Plenty of space free!
 import_levels_org=himem
                 .cerror import_levels_org+level_data_pages*256>$7c00
+                .cerror (<levels_org)!=0
 
                 .else
 
+                .if party
+
+                ; Only requires space for 1 level at a time - which
+                ; can go at himem-768
+max_gmc_pages=21
+gmc_top=himem-768
+gmc_org=gmc_top-max_gmc_pages*256
+level_addr=himem-575
+
+                .else
+
+max_gmc_pages=18
 levels_org=himem-level_data_pages*256
 gmc_org=levels_org-max_gmc_pages*256
+                .cerror (<levels_org)!=0
+
+                .endif
 
                 .endif
                 
-                .cerror (<levels_org)!=0
                 
 ;-------------------------------------------------------------------------
 
