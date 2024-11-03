@@ -63,6 +63,7 @@ def main2(options):
     budget('$.GRUN',0x1900,gmc_symbols.gedmc_levels_org)
     budget('$.GPARTY0',0x8000,0xc000)
     budget('$.GPMC',gpmc_symbols.gmc_org,gpmc_symbols.gmc_top)
+    budget('$.GPARTY',0x1200,gpmc_symbols.gmc_org-1024)
 
     if any_bad: sys.exit(1)
 

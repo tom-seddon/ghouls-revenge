@@ -30,10 +30,12 @@ import_levels_org=himem
 
                 ; Only requires space for 1 level at a time - which
                 ; can go at himem-768
-max_gmc_pages=21
-gmc_top=himem-768
-gmc_org=gmc_top-max_gmc_pages*256
 level_addr=himem-575
+scores_addr=level_addr-768
+max_gmc_pages=21
+gmc_top=scores_addr&$ff00
+gmc_org=gmc_top-max_gmc_pages*256
+                score
 
                 .else
 

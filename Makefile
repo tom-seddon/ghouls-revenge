@@ -53,7 +53,7 @@ GP_BUILD:=$(PWD)/build/party
 BEEB_VOLUME:=$(PWD)/beeb/ghouls-revenge
 
 # Where final Beeb-visible build output goes (absolute path).
-BEEB_GP_OUTPUT:=$(BEEB_VOLUME)/x
+GP_BEEB_OUTPUT:=$(BEEB_VOLUME)/x
 BEEB_OUTPUT:=$(BEEB_VOLUME)/y
 BEEB_OUTPUT_2:=$(BEEB_VOLUME)/z
 
@@ -138,13 +138,18 @@ endif
 	$(_V)$(MAKE) _asm PC=gparty_rom BEEB=ROMPREFIX
 	$(_V)$(MAKE) _party_stuff
 	$(_V)$(MAKE) _asm PC=gmc BEEB=GPMC "TASS_EXTRA_ARGS=-Deditor=false -Dparty=true"
+	$(_V)$(MAKE) _asm PC=gparty_setup BEEB=GPSETUP
 	$(_V)$(SHELLCMD) copy-file "src/gparty_boot.txt" "$(GP_BUILD)/$$.!BOOT"
 	$(_V)echo V$(VERSION_MAJOR).$(VERSION_MINOR) >> "$(GP_BUILD)/$$.!BOOT"
 	$(_V)echo Build ID: $(GHOULS_REVENGE_BUILD_SUFFIX) >> "$(GP_BUILD)/$$.!BOOT"
 	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(GP_BUILD)/$$.!BOOT"
-	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/gpmc.symbols" "" -o "$(GP_BUILD)/gparty.bas" "src/gparty.bas"
-	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(GP_BUILD)/gparty.bas" "$(GP_BUILD)/$$.GPARTY"
-	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" --title "GHOULS P" --opt4 3 --must-exist "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPARTY0" "$(GP_BUILD)/$$.GPARTY" "$(BUILD)/$$.GPMC"
+	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/gpmc.symbols" "" -o "$(BUILD)/gparty.bas" "src/gparty.bas"
+	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty.bas" "$(BUILD)/$$.GPARTY"
+	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" --title "GHOULS P" --opt4 3 --must-exist "$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPARTY" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC"
+
+	$(_V)$(SHELLCMD) rm-tree "$(GP_BEEB_OUTPUT)"
+	$(_V)$(SHELLCMD) mkdir "$(GP_BEEB_OUTPUT)"
+	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_extract.py" -o "$(GP_BEEB_OUTPUT)" -0 "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd"
 
 # Print some info
 	$(_V)$(SHELLCMD) blank-line
@@ -158,7 +163,7 @@ endif
 # same setup as for _disk_images
 _party_stuff: _LEVELS:=$(shell $(SHELLCMD) cat -f $(BUILD)/levels.txt)
 _party_stuff:
-	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --rom-prefix "$(BUILD)/$$.ROMPREFIX" --s65-output "$(BUILD)/party_levels.generated.s65" $(_LEVELS)
+	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --rom-prefix "$(BUILD)/$$.ROMPREFIX" --s65-output "$(BUILD)/party_levels.generated.s65" --scores-output "$(GP_BUILD)/$$.GPTIMES" $(_LEVELS)
 
 ##########################################################################
 ##########################################################################

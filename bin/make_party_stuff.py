@@ -63,6 +63,8 @@ def main2(options):
             options.s65_output_path is not None):
             fatal('--rom-prefix must be provided when using --rom-output-stem or --s65-output')
 
+    if len(options.input_paths)>16: fatal('max number of level sets is 16')
+
     level_sets=[]
     for input_path in options.input_paths:
         data=load_file(input_path)
@@ -149,9 +151,20 @@ def main2(options):
         with open('%s0'%options.rom_output_stem,'wb') as f: f.write(rom)
 
     # 0123456789012345678901234567890123456789
-    # ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+    # -ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
     if options.scores_output_path is not None:
-        pass
+        scores_data=b''
+        for i in range(64):
+            if i//4>=len(level_sets): digest=6*b'\x00'
+            else: digest=level_sets[i//4].hashes[i%4].digest()[:6]
+
+            scores_data+=digest
+            scores_data+=b'\x99\x99' # time
+            scores_data+=4*b'\x00'   # name (default: "------")
+
+        with open(options.scores_output_path,'wb') as f:
+            f.write(scores_data)
 
 ##########################################################################
 ##########################################################################

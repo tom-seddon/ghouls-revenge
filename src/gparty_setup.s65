@@ -1,0 +1,54 @@
+party=true
+                .include "gcommon.s65"
+
+*=$7000
+                .dsection code
+                .cerror *>$7c00
+
+                .section code
+main:
+                lda #$77
+                jsr osbyte
+
+                ; disable shadow RAM
+                lda #114
+                ldx #1
+                ldy #0
+                jsr osbyte
+
+                ;
+                lda #$ea
+                ldx #$00
+                ldy #$ff
+                jsr osbyte
+                cpx #$00
+                beq copro_ok
+
+                brk
+                .byte 255
+                .text 'Not compatible with a second processor'
+                brk
+
+copro_ok:
+                jsr define_udgs
+
+                ldx #<load_gpmc
+                ldy #>load_gpmc
+                jsr oscli
+
+                ldx #<load_gptimes
+                ldy #>load_gptimes
+                jsr oscli
+
+                rts
+
+define_udgs:
+                .include "gudgs_code.s65"
+                
+load_gpmc:
+                .text format('LOAD GPMC %X',gmc_org),13
+
+load_gptimes:
+                .text format('LOAD GPTIMES %X',scores_addr),13
+
+                .endsection

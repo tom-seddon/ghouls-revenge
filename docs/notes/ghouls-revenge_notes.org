@@ -1049,6 +1049,9 @@ The point of the matching up process would be to have some kind of
 score data merging tool. Worth doing? Could save a lot of bother if
 not...
 
+: 0123456789012345678901234567890123456789
+:                 GHOULS PARTY
+
 ** High score screen
                       |
 : 0123456789012345678901234567890123456789
