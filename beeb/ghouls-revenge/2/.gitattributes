@@ -1,2 +1,3 @@
 $.MULTEST diff=bbcbasic
 $.GRMENUSCR diff=bbcbasic
+$.GPRAM diff=bbcbasic

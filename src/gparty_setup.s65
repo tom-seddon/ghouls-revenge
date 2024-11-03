@@ -7,9 +7,6 @@ party=true
 
                 .section code
 main:
-                lda #$77
-                jsr osbyte
-
                 ; disable shadow RAM
                 lda #114
                 ldx #1

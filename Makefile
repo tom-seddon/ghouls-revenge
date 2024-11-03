@@ -145,7 +145,9 @@ endif
 	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(GP_BUILD)/$$.!BOOT"
 	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/gpmc.symbols" "" -o "$(BUILD)/gparty.bas" "src/gparty.bas"
 	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty.bas" "$(BUILD)/$$.GPARTY"
-	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" --title "GHOULS P" --opt4 3 --must-exist "$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPARTY" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC"
+	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/gpmc.symbols" "" -o "$(BUILD)/gparty_loader.bas" "src/gparty_loader.bas"
+	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty_loader.bas" "$(BUILD)/$$.GPLOAD"
+	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" --title "GHOULS P" --opt4 3 --must-exist "$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY" 
 
 	$(_V)$(SHELLCMD) rm-tree "$(GP_BEEB_OUTPUT)"
 	$(_V)$(SHELLCMD) mkdir "$(GP_BEEB_OUTPUT)"

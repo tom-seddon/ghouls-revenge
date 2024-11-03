@@ -7243,7 +7243,7 @@ gp_scores_charset:
                 .cerror *-gp_scores_charset!=40
 
 gp_rom_bank:
-                .byte 13
+                .byte 0
 gp_old_rom_bank:
                 .byte 0
 

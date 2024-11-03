@@ -1,6 +1,4 @@
-HIMEM={&gmc_org}:PROCMODE(7):*RUN GPSETUP
-{#*LOAD GPMC {~gmc_org}
-{#*LOAD GPTIMES {~scores_addr}
+HIMEM={&gmc_org}:PROCMODE(7)
 CALL{&reset_envelopes}
 {:gparty_main_loop}
 PROCMODE(7)
