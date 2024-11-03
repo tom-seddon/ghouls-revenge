@@ -6,7 +6,7 @@
 #
 # So major=0 minor=1 (say) means version 0.01.
 VERSION_MAJOR:=1
-VERSION_MINOR:=00
+VERSION_MINOR:=01
 
 # 20241015-000458-90730ec
 # local
@@ -147,11 +147,17 @@ endif
 	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty.bas" "$(BUILD)/$$.GPARTY"
 	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/gpmc.symbols" "" -o "$(BUILD)/gparty_loader.bas" "src/gparty_loader.bas"
 	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty_loader.bas" "$(BUILD)/$$.GPLOAD"
-	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" --title "GHOULS P" --opt4 3 --must-exist "$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY" 
+	$(_V)$(MAKE) _party_disk_images
 
 	$(_V)$(SHELLCMD) rm-tree "$(GP_BEEB_OUTPUT)"
 	$(_V)$(SHELLCMD) mkdir "$(GP_BEEB_OUTPUT)"
 	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_extract.py" -o "$(GP_BEEB_OUTPUT)" -0 "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd"
+
+	$(_V)$(SHELLCMD) copy-file "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" "$(BEEB_OUTPUT_2)/S.GPARTY"
+	$(_V)$(SHELLCMD) copy-file "$(GP_OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(BEEB_OUTPUT_2)/S.GPARTY40"
+	$(_V)$(SHELLCMD) copy-file "$(GP_OUTPUT_DISK_IMAGE_STEM).adl" "$(BEEB_OUTPUT_2)/L.GPARTYA"
+	$(_V)$(SHELLCMD) copy-file "$(GP_OUTPUT_DISK_IMAGE_STEM).adm" "$(BEEB_OUTPUT_2)/M.GPARTYA"
+	$(_V)$(SHELLCMD) copy-file "$(GP_OUTPUT_DISK_IMAGE_STEM).ads" "$(BEEB_OUTPUT_2)/S.GPARTYA"
 
 # Print some info
 	$(_V)$(SHELLCMD) blank-line
@@ -166,6 +172,18 @@ endif
 _party_stuff: _LEVELS:=$(shell $(SHELLCMD) cat -f $(BUILD)/levels.txt)
 _party_stuff:
 	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --rom-prefix "$(BUILD)/$$.ROMPREFIX" --s65-output "$(BUILD)/party_levels.generated.s65" --scores-output "$(GP_BUILD)/$$.GPTIMES" $(_LEVELS)
+
+.PHONY:_party_disk_images
+_party_disk_images: _FILES:="$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY"
+_party_disk_images: _SSD_OPTIONS:=--title "GHOULS P" --opt4 3 --must-exist
+_party_disk_images: _ADF_OPTIONS:=--title "GHOULS PARTY" --opt4 3
+_party_disk_images:
+	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" $(_SSD_OPTIONS) $(_FILES)
+	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).40.ssd" $(_SSD_OPTIONS) --40 $(_FILES)
+
+	$(_V)$(PYTHON) "$(BEEB_BIN)/adf_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).adl" --type l $(_ADF_OPTIONS) $(_FILES)
+	$(_V)$(PYTHON) "$(BEEB_BIN)/adf_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).adm" --type m $(_ADF_OPTIONS) $(_FILES)
+	$(_V)$(PYTHON) "$(BEEB_BIN)/adf_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ads" --type s $(_ADF_OPTIONS) $(_FILES)
 
 ##########################################################################
 ##########################################################################
@@ -257,12 +275,13 @@ endif
 # disk ID.
 .PHONY:ci_build
 ci_build:
-	$(_V)$(MAKE) build ci_zip OUTPUT_DISK_IMAGE_STEM=$(shell $(MAKE) ci_echo_versioned_stem)
-	$(_V)$(MAKE) build ci_zip OUTPUT_DISK_IMAGE_STEM=$(shell $(MAKE) ci_echo_build_suffixed_stem)
+	$(_V)$(MAKE) build ci_zip OUTPUT_DISK_IMAGE_STEM=$(OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_versioned_suffix) GP_OUTPUT_DISK_IMAGE_STEM=$(GP_OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_versioned_suffix)
+	$(_V)$(MAKE) build ci_zip OUTPUT_DISK_IMAGE_STEM=$(OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_build_suffix) GP_OUTPUT_DISK_IMAGE_STEM=$(GP_OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_build_suffix)
 
 .PHONY:ci_zip
 ci_zip:
-	$(_V)zip -9j "$(OUTPUT_DISK_IMAGE_STEM).zip" "$(OUTPUT_DISK_IMAGE_STEM).ssd" "$(OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(OUTPUT_DISK_IMAGE_STEM).ads" "$(OUTPUT_DISK_IMAGE_STEM).adm" "$(OUTPUT_DISK_IMAGE_STEM).adl" "$(BUILD)/README.txt"
+	$(_V)zip -9j "$(OUTPUT_DISK_IMAGE_STEM).zip" "$(OUTPUT_DISK_IMAGE_STEM).ssd" "$(OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(OUTPUT_DISK_IMAGE_STEM).ads" "$(OUTPUT_DISK_IMAGE_STEM).adm" "$(OUTPUT_DISK_IMAGE_STEM).adl"
+	$(_V)zip -9j "$(GP_OUTPUT_DISK_IMAGE_STEM).zip" "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" "$(GP_OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(GP_OUTPUT_DISK_IMAGE_STEM).ads" "$(GP_OUTPUT_DISK_IMAGE_STEM).adm" "$(GP_OUTPUT_DISK_IMAGE_STEM).adl" "$(BUILD)/README.txt"
 
 # If testing ci_build locally, ci_clean will remove all the junk it
 # produces - along with anything else that matches the not very
@@ -272,13 +291,13 @@ ci_clean:
 	$(_V)$(MAKE) clean
 	$(_V)$(SHELLCMD) rm-file -f $(wildcard *.ssd) $(wildcard *.ads) $(wildcard *.adm) $(wildcard *.adl) $(wildcard *.zip)
 
-.PHONY:ci_echo_versioned_stem
-ci_echo_versioned_stem:
-	@echo $(OUTPUT_DISK_IMAGE_STEM)-v$(VERSION_MAJOR).$(VERSION_MINOR)
+.PHONY:ci_echo_versioned_suffix
+ci_echo_versioned_suffix:
+	@echo v$(VERSION_MAJOR).$(VERSION_MINOR)
 
-.PHONY:ci_echo_build_suffixed_stem
-ci_echo_build_suffixed_stem:
-	@echo $(OUTPUT_DISK_IMAGE_STEM)-$(GHOULS_REVENGE_BUILD_SUFFIX)
+.PHONY:ci_echo_build_suffix
+ci_echo_build_suffix:
+	@echo $(GHOULS_REVENGE_BUILD_SUFFIX)
 
 ##########################################################################
 ##########################################################################

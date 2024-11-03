@@ -161,7 +161,8 @@ def main2(options):
 
             scores_data+=digest
             scores_data+=b'\x99\x99' # time
-            scores_data+=4*b'\x00'   # name (default: "------")
+            w=1*40*40+1*40+1
+            scores_data+=bytes([w&0xff,w>>8,w&0xff,w>>8])
 
         with open(options.scores_output_path,'wb') as f:
             f.write(scores_data)

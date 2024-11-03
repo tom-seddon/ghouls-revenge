@@ -7234,13 +7234,14 @@ zx02_out_addr=level_addr+size(LevelData.name)
                 .dsection zx02_code
 
 gp_scores_charset:
-                .text '-'       ; 1
-                .text ' '       ; 2
+                .text ' '       ; 1
+                .text '-'       ; 2
                 .text 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' ; 28
                 .text '0123456789'                 ; 38
                 .text '!'                          ; 39
                 .text '?'                          ; 40
                 .cerror *-gp_scores_charset!=40
+                .byte 13        ; (to allow use of $ operator in BASIC)
 
 gp_rom_bank:
                 .byte 0

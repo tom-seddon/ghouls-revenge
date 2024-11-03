@@ -18,8 +18,10 @@ install:
   - popd
   - ps: $env:GHOULS_REVENGE_BUILD_SUFFIX = $(git log -1 --format=%cd-%h --date=format:%Y%m%d-%H%M%S $env:APPVEYOR_REPO_COMMIT)
   - ps: $env:GHOULS_REVENGE_RELEASE_NAME = "ghouls-revenge-"+$env:GHOULS_REVENGE_BUILD_SUFFIX
-  - export GHOULS_REVENGE_VERSIONED_STEM=$(make ci_echo_versioned_stem)
-  - export GHOULS_REVENGE_BUILD_SUFFIXED_STEM=$(make ci_echo_build_suffixed_stem)
+  - export GHOULS_REVENGE_VERSIONED_STEM=ghouls-revenge-$(make ci_echo_versioned_suffix)
+  - export GHOULS_REVENGE_BUILD_SUFFIXED_STEM=ghouls-revenge-$(make ci_echo_build_suffix)
+  - export GHOULS_PARTY_VERSIONED_STEM=ghouls-party-$(make ci_echo_versioned_suffix)
+  - export GHOULS_PARTY_BUILD_SUFFIXED_STEM=ghouls-party-$(make ci_echo_build_suffix)
 
 build_script:
   - ps: make ci_build VERBOSE=1 TASS=$HOME/tass64-code/64tass
@@ -30,6 +32,10 @@ artifacts:
     name: versioned-zip
   - path: $(GHOULS_REVENGE_BUILD_SUFFIXED_STEM).zip
     name: build-suffixed-zip
+  - path: $(GHOULS_PARTY_VERSIONED_STEM).zip
+    name: party-versioned-zip
+  - path: $(GHOULS_PARTY_BUILD_SUFFIXED_STEM).zip
+    name: party-build-suffixed-zip
 
 deploy:
   - release: $(GHOULS_REVENGE_RELEASE_NAME)
@@ -39,6 +45,6 @@ deploy:
     provider: GitHub
     auth_token:
       secure: 4W5gLh9wP/h+mqHPWAnfkq+TdLFmrzC926Z1KZSM8A4HSkZ2bzS+cP/RAUkm9Qao
-    artifact: versioned-zip,build-suffixed-zip
+    artifact: versioned-zip,build-suffixed-zip,party-versioned-zip,party-build-suffixed-zip
     draft: false
     prerelease: false
