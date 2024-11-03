@@ -68,7 +68,7 @@ def main2(options):
     
     def set_value(name,value,src_line,src_column):
         if name in values_by_name:
-            sys.stderr.write('%s:%d:%d: already defined: %s\n'%(
+            sys.stderr.write('%s: already defined: %s\n'%(
                 loc_str(src_line,src_column),
                 name))
             value=values_by_name[name]
