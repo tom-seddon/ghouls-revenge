@@ -1,5 +1,6 @@
 HIMEM={&gmc_org}:PROCMODE(7):DIMNAMEBUF 8
 CALL{&reset_envelopes}
+ONERROR:IFERR=17:GOTO{$gparty_main_loop}:ELSE:MODE7:REPORT:PRINT" at line ";ERL:END
 PLAYED=FALSE
 SSET=-1
 LEVEL=-1
