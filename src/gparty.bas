@@ -82,6 +82,7 @@ IFN>=6:GOTO{$gparty_highscore_loop}
 NAMEBUF?N=I-1:N=N+1:VDUG
 GOTO{$gparty_highscore_loop}
 {:gparty_highscore_done}
+PROCCUR(0)
 FORI=N TO5:NAMEBUF?I=0:NEXT
 SA={&scores_addr}+LEVEL*12
 PROCPOKEW(SA+8,NAMEBUF?0*40*40+NAMEBUF?1*40+NAMEBUF?2)
