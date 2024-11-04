@@ -37,7 +37,7 @@ SOUND&12,4,0,18:SOUND&13,4,1,18:FORF=1TO40:VDU23,0,1,F;0;0;0;:*FX19
 NEXT
 !{&player_addr}=&5800+LDATA?{$LevelData_pl_start_x_offset}*16+(4+LDATA?{$LevelData_pl_start_y_offset})*320:CALL{&copy_data_behind_player}
 ?{&bonus_update_timer}=31
-CALL{&entry_game}:*FX15
+CALL{&entry_game}:*FX15,1
 IFW%:GOTO{$gparty_success}
 IF?{&level_finished}=255GOTO{$gparty_success}
 SOUND&10,-15,3,18:FORF=200TO0STEP-.6:SOUND&11,0,F,1:NEXT:N=?{&player_addr+1}*256+?{&player_addr}:IF?(N+326)=224N=N+320 ELSEIF?(N-314)=224N=N-320
@@ -49,7 +49,7 @@ SOUND&10,4,4,18:CALL{&entry_slide_off}:VDU23,0,13,0;0;0;0;
 GOTO{$gparty_game_loop}
 {:gparty_success}
 CALL{&reset_envelopes}
-*FX15
+*FX15,1
 SOUND&11,2,2,50:SOUND&12,2,130,50
 FORF=1TO700:NEXT:SOUND&11,2,100,50:FORF=1TO4000:NEXT
 G=999:F=999:H=999
@@ -64,7 +64,7 @@ DEFFNTOUPPER(X):IFX>=ASC"a"ANDX<=ASC"z":=X AND&DF:ELSE:=X
 DEFPROCPRINTTIME(A):PRINTRIGHT$("0"+STR$~A?1,2)"."RIGHT$("0"+STR$~A?0,2);:ENDPROC
 DEFPROCPOKEW(A,X):?A=X:A?1=X DIV256:ENDPROC
 DEFPROCHIGHSCORE
-*FX15
+*FX15,1
 NAMEBUF!0=0:NAMEBUF!4=0
 Y=3+LEVEL DIV4+1+LEVEL MOD4
 X=30
