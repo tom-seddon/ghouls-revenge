@@ -55,16 +55,9 @@ LevelSet=collections.namedtuple('LevelSet','name levels addrs hashes')
 def main2(options):
     global g_verbose;g_verbose=options.verbose
 
-    if options.rom_prefix_path is not None:
-        with open(options.rom_prefix_path,'rb') as f: rom_prefix=f.read()
-    else:
-        rom_prefix=None
-        if (options.rom_output_stem is not None or
-            options.s65_output_path is not None):
-            fatal('--rom-prefix must be provided when using --rom-output-stem or --s65-output')
-
     if len(options.input_paths)>16: fatal('max number of level sets is 16')
 
+    h_all=hashlib.sha256()
     level_sets=[]
     for input_path in options.input_paths:
         data=load_file(input_path)
@@ -102,33 +95,45 @@ def main2(options):
                                    addrs=addrs,
                                    hashes=hashes))
 
-    # uncompressed_size=0
-    # compressed_size=0
-    # for level_set in level_sets:
-    #     for level in level_set.levels:
-    #         uncompressed_size+=len(level)
-    #         compressed_size+=len(get_zx02_data(level,options))
-    # pv('%d/%d compressed'%(compressed_size,uncompressed_size))
+    h_all=hashlib.sha256()
+    for level_set in level_sets:
+        for level in level_set.levels: h_all.update(level)
 
-    rom=None
-    if rom_prefix is not None:
-        rom=rom_prefix
-        for level_set in level_sets:
-            for i,level in enumerate(level_set.levels):
-                addr=0x8000+len(rom)
-                # Level name is uncompressed
-                rom+=level[0:17]
+    # the full length is a bit much for *ROMS
+    h_all_str=h_all.hexdigest()[:12]
+        
+    def as_chars(s): return [ord(c) for c in s]
 
-                # Rest of data is compressed
-                rom+=get_zx02_data(level[17:],options)
+    rom=[]
+    rom+=[0,0,0]            # language non-entry
+    rom+=[0x60,0,0]         # service "routine"
+    rom+=[0x82]             # ROM type
+    rom+=[None]             # copyright offset (filled in later)
+    rom+=[0]                # version
+    rom+=as_chars('Ghouls Party '+h_all_str) # ROM name
+    rom+=[0]                      # ROM name terminator
+    rom[7]=len(rom)
+    rom+=[0]                         # ROM version terminator
+    rom+=as_chars('(C)')
+    rom+=[0]
 
-                if len(rom)>16384:
-                    # Didn't expect it initially, but the compressed
-                    # level data is super tiny. So I dodged a bit of
-                    # work...
-                    fatal('level data would take up >1 bank - TODO')
+    rom=bytes(rom)
+    for level_set in level_sets:
+        for i,level in enumerate(level_set.levels):
+            addr=0x8000+len(rom)
+            # Level name is uncompressed
+            rom+=level[0:17]
 
-                level_set.addrs[i]=LevelAddr(bank=0,addr=addr)
+            # Rest of data is compressed
+            rom+=get_zx02_data(level[17:],options)
+
+            if len(rom)>16384:
+                # Didn't expect it initially, but the compressed
+                # level data is super tiny. So I dodged a bit of
+                # work...
+                fatal('level data would take up >1 bank - TODO')
+
+            level_set.addrs[i]=LevelAddr(bank=0,addr=addr)
 
     if options.s65_output_path is not None:
         with open(options.s65_output_path,'wt') as f:
@@ -167,6 +172,10 @@ def main2(options):
         with open(options.scores_output_path,'wb') as f:
             f.write(scores_data)
 
+    if options.symbols_output_path is not None:
+        with open(options.symbols_output_path,'wt') as f:
+            f.write('levels_hash="%s"\n'%h_all_str)
+
 ##########################################################################
 ##########################################################################
 
@@ -176,11 +185,11 @@ def main(argv):
     parser.add_argument('-v','--verbose',action='store_true',help='be more verbose')
     parser.add_argument('--s65-output',dest='s65_output_path',metavar='FILE',help='''write metadata code to %(metavar)s''')
     parser.add_argument('--rom-output-stem',metavar='STEM',help='''write ROM data to %(metavar)s0, %(metavar)s1, etc.''')
-    parser.add_argument('--rom-prefix',dest='rom_prefix_path',metavar='FILE',help='''read ROM prefix from %(metavar)s''')
     parser.add_argument('--zx02-cache-path',dest='zx02_cache_path',default=None,metavar='FOLDER',help='''use %(metavar)s as cache path for .zx02 files''')
     parser.add_argument('--zx02',dest='zx02_path',metavar='FILE',default=None,help='''use %(metavar)s as zx02 executable''')
     parser.add_argument('--scores-output',dest='scores_output_path',metavar='FILE',help='''output initial scores file to %(metavar)s''')
     parser.add_argument('input_paths',nargs='+',metavar='FILE',help='''read Ghouls level set(s) from %(metavar)s''')
+    parser.add_argument('--symbols-output',dest='symbols_output_path',metavar='FILE',help='''output bbpp symbols file to %(metavar)s''')
 
     main2(parser.parse_args(argv[1:]))
 

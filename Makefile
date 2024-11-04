@@ -135,7 +135,6 @@ endif
 	$(_V)$(SHELLCMD) copy-file "$(OUTPUT_DISK_IMAGE_STEM).ads" "$(BEEB_OUTPUT_2)/S.GHOULSA"
 
 # Ghouls Party
-	$(_V)$(MAKE) _asm PC=gparty_rom BEEB=ROMPREFIX
 	$(_V)$(MAKE) _party_stuff
 	$(_V)$(MAKE) _asm PC=gmc BEEB=GPMC "TASS_EXTRA_ARGS=-Deditor=false -Dparty=true"
 	$(_V)$(MAKE) _asm PC=gparty_setup BEEB=GPSETUP
@@ -145,7 +144,7 @@ endif
 	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(GP_BUILD)/$$.!BOOT"
 	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/GPMC.symbols" "" -o "$(BUILD)/gparty.bas" "src/gparty.bas"
 	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty.bas" "$(BUILD)/$$.GPARTY"
-	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/GPMC.symbols" "" -o "$(BUILD)/gparty_loader.bas" "src/gparty_loader.bas"
+	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/GPMC.symbols" "" --asm-symbols "$(BUILD)/party_stuff.symbols" "" -o "$(BUILD)/gparty_loader.bas" "src/gparty_loader.bas"
 	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty_loader.bas" "$(BUILD)/$$.GPLOAD"
 	$(_V)$(MAKE) _party_disk_images
 
@@ -171,7 +170,7 @@ endif
 # same setup as for _disk_images
 _party_stuff: _LEVELS:=$(shell $(SHELLCMD) cat -f $(BUILD)/levels.txt)
 _party_stuff:
-	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --rom-prefix "$(BUILD)/$$.ROMPREFIX" --s65-output "$(BUILD)/party_levels.generated.s65" --scores-output "$(GP_BUILD)/$$.GPTIMES" $(_LEVELS)
+	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --s65-output "$(BUILD)/party_levels.generated.s65" --scores-output "$(GP_BUILD)/$$.GPTIMES" --symbols-output "$(BUILD)/party_stuff.symbols" $(_LEVELS)
 
 .PHONY:_party_disk_images
 _party_disk_images: _FILES:="$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY"

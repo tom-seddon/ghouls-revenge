@@ -111,11 +111,13 @@ def main2(options):
                 sys.exit(1)
 
             name=prefix+parts[0].strip()
-            
+
             # Since these are labels, they are numbers. So fix up
             # non-BBC hex syntax.
             value=parts[1].strip()
-            if value.startswith('$'): value=int(value[1:],16)
+            if value.startswith('"') and value.endswith('"'):
+                value=value[1:-1]
+            elif value.startswith('$'): value=int(value[1:],16)
             else:
                 try: value=int(value)
                 except:
