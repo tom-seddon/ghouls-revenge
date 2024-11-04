@@ -17,7 +17,7 @@ NEXTSET
 IFPLAYED:PLAYED=FALSE:PROCHIGHSCORE:GOTO{$gparty_levels_ui_loop}
 G%=FNTOUPPER(GET)
 IFSSET>=0ANDG%>=ASC"1"ANDG%<=ASC"4":LEVEL=SSET*4+G%-ASC"1":GOTO{$gparty_game}
-IFG%>=ASC"A"ANDG%<ASC"Z"+?{&num_level_sets}:SSET=G%-ASC"A"
+IFG%>=ASC"A"ANDG%<ASC"A"+?{&num_level_sets}:SSET=G%-ASC"A"
 GOTO{$gparty_levels_ui_loop}
 {:gparty_game}
 LDATA={&level_addr}{#I started out trying to change the code so all occurrences could be sorted out at compile time, but the tedium made me give up
