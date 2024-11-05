@@ -33,10 +33,6 @@ copro_ok:
                 ldy #>load_gpmc
                 jsr oscli
 
-                ldx #<load_gptimes
-                ldy #>load_gptimes
-                jsr oscli
-
                 rts
 
 define_udgs:
@@ -45,7 +41,5 @@ define_udgs:
 load_gpmc:
                 .text format('LOAD GPMC %X',gmc_org),13
 
-load_gptimes:
-                .text format('LOAD GPTIMES %X',scores_addr),13
-
                 .endsection
+                
