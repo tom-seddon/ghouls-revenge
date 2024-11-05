@@ -6,7 +6,7 @@
 #
 # So major=0 minor=1 (say) means version 0.01.
 VERSION_MAJOR:=1
-VERSION_MINOR:=02
+VERSION_MINOR:=03
 
 # 20241015-000458-90730ec
 # local
