@@ -7,6 +7,7 @@ SSET=-1
 LEVEL=-1
 {:gparty_main_loop}
 PROCMODE(7)
+*FX15 1
 FORL=0TO1:PRINTTAB(14,L)CHR$(129+L)CHR$141"GHOULS PARTY":NEXT
 {:gparty_levels_ui_loop}
 {#PRINTTAB(0,2)"S=";SSET" L=";LEVEL" PL=";PLAYED"        "
