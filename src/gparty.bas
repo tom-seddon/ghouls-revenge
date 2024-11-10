@@ -48,7 +48,7 @@ NEXT
 !{&player_addr}=&5800+LDATA?{$LevelData_pl_start_x_offset}*16+(4+LDATA?{$LevelData_pl_start_y_offset})*320:CALL{&copy_data_behind_player}
 ?{&bonus_update_timer}=31
 CALL{&entry_game}:*FX15,1
-IFW%:GOTO{$gparty_success}
+IFW%:IFINKEY-2:GOTO{$gparty_success}
 IF?{&level_finished}=255GOTO{$gparty_success}
 SOUND&10,-15,3,18:FORF=200TO0STEP-.6:SOUND&11,0,F,1:NEXT:N=?{&player_addr+1}*256+?{&player_addr}:IF?(N+326)=224N=N+320 ELSEIF?(N-314)=224N=N-320
 K=110:FORG={&sprite_pl_die_0} TO {&sprite_pl_die_7} STEP16:FORF=0TO15STEP4:F!N=F!G:NEXT
