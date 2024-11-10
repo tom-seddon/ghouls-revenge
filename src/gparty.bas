@@ -1,4 +1,4 @@
-HIMEM={&gmc_org}:PROCMODE(7):DIMNAMEBUF 8
+HIMEM={&gmc_org}:PROCMODE(7):DIMNAMEBUF 8,PREVSA 12
 *LOAD GPTIMES {~scores_addr}
 CALL{&reset_envelopes}
 ONERROR:IFERR=17:GOTO{$gparty_main_loop}:ELSE:MODE7:REPORT:PRINT" at line ";ERL:END
@@ -9,19 +9,27 @@ LEVEL=-1
 PROCMODE(7)
 *FX15 1
 FORL=0TO1:PRINTTAB(14,L)CHR$(129+L)CHR$141"GHOULS PARTY":NEXT
+HIGH=0:IFPLAYED:SA={&scores_addr}+LEVEL*12:IF(!{&time_bcd} AND&FFFF)<(SA!6 AND&FFFF):PREVSA!0=SA!0:PREVSA!4=SA!4:PREVSA!8=SA!8:SA?6=?{&time_bcd}:SA?7=?{&time_bcd+1}:HIGH=1
 {:gparty_levels_ui_loop}
 {#PRINTTAB(0,2)"S=";SSET" L=";LEVEL" PL=";PLAYED"        "
-IFPLAYED:SA={&scores_addr}+LEVEL*12+6:IF(!{&time_bcd} AND&FFFF)<(!SA AND&FFFF):SA?0=?{&time_bcd}:SA?1=?{&time_bcd+1}:ELSE:PLAYED=FALSE
 PRINTTAB(0,3);
 FORSET=0TO?{&num_level_sets}-1:A=!({&level_set_names}+SET*2)AND&FFFF:VDU65+SET:PRINTCHR$134$A;STRING$(37-LEN$A," ")
-IFSET=SSET:FORL=0TO3:PRINT"  ";1+L;CHR$131;:Y%=SET*4+L:X%=19:CALL{&gp_print_level_name}:SA={&scores_addr}+Y%*12:VDU135:PROCPRINTTIME(SA!6):VDU130:PROCNAME(SA+8):PROCNAME(SA+10):PRINT:NEXT
+IFSET<>SSET:GOTO{$nextset}
+FORL=0TO3:PRINT"  ";1+L;CHR$131;:Y%=SET*4+L:X%=19:CALL{&gp_print_level_name}:SA={&scores_addr}+Y%*12:VDU135:PROCPRINTTIME(SA!6):VDU130
+IFHIGH=1ANDY%=LEVEL:PRINT:ELSE:PROCNAME(SA+8):PROCNAME(SA+10):PRINT
+IFHIGH>0ANDY%=LEVEL:PRINTTAB(9)CHR$134"PREVIOUS BEST";:VDU135:PROCPRINTTIME(PREVSA!6):VDU130:PROCNAME(PREVSA+8):PROCNAME(PREVSA+10):PRINT:
+IFPLAYED ANDHIGH=0 ANDY%=LEVEL:PRINTTAB(15)CHR$134"LAST GO";:VDU135:PROCPRINTTIME(!{&time_bcd}):PRINT
+NEXT
+{:nextset}
 NEXTSET
-IFPLAYED:PLAYED=FALSE:PROCHIGHSCORE:GOTO{$gparty_levels_ui_loop}
+IFVPOS<24:FORI=VPOS TO24:PRINTTAB(0,I)STRING$(39," ");:NEXT
+IFHIGH=1:PROCHIGHSCORE:HIGH=2:GOTO{$gparty_levels_ui_loop}
 G%=FNTOUPPER(GET)
 IFSSET>=0ANDG%>=ASC"1"ANDG%<=ASC"4":LEVEL=SSET*4+G%-ASC"1":GOTO{$gparty_game}
 IFG%>=ASC"A"ANDG%<ASC"A"+?{&num_level_sets}:SSET=G%-ASC"A"
 GOTO{$gparty_levels_ui_loop}
 {:gparty_game}
+PLAYED=FALSE
 LDATA={&level_addr}{#I started out trying to change the code so all occurrences could be sorted out at compile time, but the tedium made me give up
 PROCMODE(5)
 {:gparty_game_loop}
