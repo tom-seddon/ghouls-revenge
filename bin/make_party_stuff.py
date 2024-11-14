@@ -84,7 +84,7 @@ def main2(options):
 
             h=hashlib.sha256()
             h.update(bytes([level[18],     # player start X
-                            level[10],     # player start Y
+                            level[19],     # player start Y
                             level[20]&2])) # standard goal flag
             h.update(level[55:575])        # level data
 
