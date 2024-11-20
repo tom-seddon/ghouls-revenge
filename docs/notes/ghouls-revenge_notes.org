@@ -1059,6 +1059,10 @@ not...
 :  1. XX.XX XYZ 2. XX.XX XYZ
 :  3. XX.XX XYZ 4. XX.XX XYZ
 
+* Ghouls Party Notes
+
+
+
 * .dir-locals.el
 
 : ((nil . ((compile-command . "cd C:\\tom\\github\\ghouls-tng && make _tom_windows_laptop"))))

@@ -170,7 +170,7 @@ endif
 # same setup as for _disk_images
 _party_stuff: _LEVELS:=$(shell $(SHELLCMD) cat -f $(BUILD)/levels.txt)
 _party_stuff:
-	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --s65-output "$(BUILD)/party_levels.generated.s65" --scores-output "$(GP_BUILD)/$$.GPTIMES" --symbols-output "$(BUILD)/party_stuff.symbols" $(_LEVELS)
+	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --s65-output "$(BUILD)/party_levels.generated.s65" --scores-output "$(GP_BUILD)/$$.GPTIMES" --symbols-output "$(BUILD)/party_stuff.symbols" --metadata-output "$(BUILD)/party_stuff.json" $(_LEVELS)
 
 .PHONY:_party_disk_images
 _party_disk_images: _FILES:="$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY" "$(BUILD)/$$.README"

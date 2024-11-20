@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import sys,os,argparse,collections,hashlib,subprocess
+import sys,os,argparse,collections,hashlib,subprocess,json
 
 ##########################################################################
 ##########################################################################
@@ -176,6 +176,30 @@ def main2(options):
         with open(options.symbols_output_path,'wt') as f:
             f.write('levels_hash="%s"\n'%h_all_str)
 
+    if options.metadata_output_path is not None:
+        def get_level_json(level_set,level_idx):
+            # name is CR-terminated so it'll always be found
+            name=level_set.levels[level_idx][0:17].decode('ascii')
+            name=name[:name.index('\r')]
+            
+            return {
+                'name':name,
+                'hash':level_set.hashes[level_idx].hexdigest(),
+            }
+        
+        def get_level_set_json(level_set):
+            return {
+                'name':level_set.name,
+                'levels':[get_level_json(level_set,i) for i in range(4)],
+            }
+
+        root_j={
+            'level_sets':[get_level_set_json(level_set) for level_set in level_sets],
+        }
+
+        with open(options.metadata_output_path,'wt') as f:
+            json.dump(root_j,f,indent='\t')
+
 ##########################################################################
 ##########################################################################
 
@@ -190,6 +214,7 @@ def main(argv):
     parser.add_argument('--scores-output',dest='scores_output_path',metavar='FILE',help='''output initial scores file to %(metavar)s''')
     parser.add_argument('input_paths',nargs='+',metavar='FILE',help='''read Ghouls level set(s) from %(metavar)s''')
     parser.add_argument('--symbols-output',dest='symbols_output_path',metavar='FILE',help='''output bbpp symbols file to %(metavar)s''')
+    parser.add_argument('--metadata-output',dest='metadata_output_path',metavar='FILE',help='''write JSON metadata info to %(metavar)s''')
 
     main2(parser.parse_args(argv[1:]))
 
