@@ -12,7 +12,8 @@ Once the ghost is defeated - or if you admit defeat yourself - use the
 level editor to devise fresh torments.
 
 Then, for a completely fresh take on the Ghouls experience, try the
-all-new Ghouls Party!
+all-new Ghouls Party! Race through any level of your choice to beat
+the best time. Scores are saved to disk and best times are shareable.
 
 # Running the game
 
@@ -93,11 +94,14 @@ testing your own levels or when modifying the code:
 # Ghouls Party instructions
 
 Ghouls Party is a version of Ghouls: Revenge designed for kiosk/arcade
-cabinet type play at events or shows. The only game mode is Time
-Attack, all level sets are permanently resident, and scores are saved
-to disk so they are persistent between runs.
+cabinet type play at events or shows, or offline asynchronous
+competition. The only game mode is Time Attack, all level sets are
+permanently resident, scores are saved to disk so they are persistent
+between runs, and there's a BASIC tool for handling merging best
+scores from multiple sets of score files.
 
-Ghouls Party requires 1 unoccupied 16 KB sideways RAM bank.
+As well as the system requirements for Ghouls Revenge, and Ghouls
+Party also requires 1 unoccupied 16 KB sideways RAM bank.
 
 The Ghouls Party disk images are auto-booting. Just press SHIFT+BREAK.
 There's no title screen - the main menu will appear shortly, listing
@@ -111,17 +115,62 @@ or complete the level. If you beat the previous time, enter your name
 RETURN, and your score will be immortalized on disk. Until it's beaten
 again, at least...
 
+## Printing times
+
+To print the current times to a text file, run the BASIC program
+`TPRINT` from the Ghouls Party disk.
+
+    CHAIN"TPRINT"
+	
+The output will be shown on screen, and also saved to a file called
+`GPTIMET` on the disk.
+
 ## Score files
 
-Ghouls Party score files are mergeable with a PC-based command line
-tool, if you want to collate the best times from multiple events. See
-`bin/ghouls_party_tool.py` in the repo. Use the tool to merge the
-score files, then overwrite the existing score file on the BBC disk
-with the new data.
+Scores are saved to a file called `GPTIMES`, which you can back up or
+send to people. Score files are specific to a particular Ghouls Party
+build, and can't be freely mixed - but you can use the BASIC program
+`TMERGE` on the Ghouls Party disk to merge scores from another score
+file into yours.
 
-If you'd like more information, please [open a GitHub
-issue](https://github.com/tom-seddon/ghouls-revenge/issues) and I'll
-write up some proper documentation for this.
+    CHAIN"TMERGE"
+
+You'll be asked to specify the name of a file to load. If using DFS,
+simply swap to another Ghouls Party disk and enter `GPTIMES` to load
+its scores; otherwise, you can enter * commands by entering something
+beginning with `*`. (For example, with ADFS, you'll need to do the
+usual `*MOUNT` business.)
+
+Once the file has loaded, you'll be prompted to reinsert the Ghouls
+Party disk and enter `Y`. Again, you can enter * commands by entering
+something beginning with `*`.
+
+You'll then see each level set in turn, with each level's current
+score, and the score found (if any) for it in the other scores file.
+The other score will be merged across if it's quicker, or not if it's
+slower or the same.
+
+If you see the message `No record for this level found`, this level
+has no match in the levels in the other score file, probably because
+the level data has since changed (rendering the original time
+invalid).
+
+Press `SPACE` to accept the result - this is usually what you want -
+or toggle the merge status of each score with keys `1` to `4`.
+
+Once you've gone through all the level sets, the merged scores file
+will be saved to `GPTIMES` on disk.
+
+A backup of the old file can be found in `GPTIMEB`.
+
+## Bitshifters' Best Times
+
+Our own set of best times can be found in the file `BTIMES`, for
+merging into your own score file if you fancy trying to beat them!
+
+NOTE: these scores were obtained using a prerelease version of the
+game, with older versions of some levels. You may see `No record for
+this level found` messages when merging.
 
 # Credits
 
