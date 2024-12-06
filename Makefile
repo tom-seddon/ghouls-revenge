@@ -257,6 +257,7 @@ clean:
 	$(_V)$(SHELLCMD) rm-tree "$(BUILD)"
 	$(_V)$(SHELLCMD) rm-tree "$(BEEB_OUTPUT)"
 	$(_V)$(SHELLCMD) rm-tree "$(BEEB_OUTPUT_2)"
+	$(_V)$(SHELLCMD) rm-tree "$(GP_BEEB_OUTPUT)"
 	$(_V)$(SHELLCMD) rm-file -f "$(OUTPUT_DISK_IMAGE_STEM).ssd"
 	$(_V)$(SHELLCMD) rm-file -f "$(OUTPUT_DISK_IMAGE_STEM).40.ssd"
 	$(_V)$(SHELLCMD) rm-file -f "$(OUTPUT_DISK_IMAGE_STEM).ads"
