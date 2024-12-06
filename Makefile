@@ -279,13 +279,12 @@ endif
 # disk ID.
 .PHONY:ci_build
 ci_build:
-	$(_V)$(MAKE) build ci_zip OUTPUT_DISK_IMAGE_STEM=$(OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_versioned_suffix) GP_OUTPUT_DISK_IMAGE_STEM=$(GP_OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_versioned_suffix)
-	$(_V)$(MAKE) build ci_zip OUTPUT_DISK_IMAGE_STEM=$(OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_build_suffix) GP_OUTPUT_DISK_IMAGE_STEM=$(GP_OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_build_suffix)
+	$(_V)$(MAKE) build _ci_zip OUTPUT_DISK_IMAGE_STEM=$(OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_versioned_suffix) GP_OUTPUT_DISK_IMAGE_STEM=$(GP_OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_versioned_suffix)
+	$(_V)$(MAKE) build _ci_zip OUTPUT_DISK_IMAGE_STEM=$(OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_build_suffix) GP_OUTPUT_DISK_IMAGE_STEM=$(GP_OUTPUT_DISK_IMAGE_STEM)-$(shell $(MAKE) ci_echo_build_suffix)
 
-.PHONY:ci_zip
-ci_zip:
-	$(_V)zip -9j "$(OUTPUT_DISK_IMAGE_STEM).zip" "$(OUTPUT_DISK_IMAGE_STEM).ssd" "$(OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(OUTPUT_DISK_IMAGE_STEM).ads" "$(OUTPUT_DISK_IMAGE_STEM).adm" "$(OUTPUT_DISK_IMAGE_STEM).adl"
-	$(_V)zip -9j "$(GP_OUTPUT_DISK_IMAGE_STEM).zip" "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" "$(GP_OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(GP_OUTPUT_DISK_IMAGE_STEM).ads" "$(GP_OUTPUT_DISK_IMAGE_STEM).adm" "$(GP_OUTPUT_DISK_IMAGE_STEM).adl" "$(BUILD)/README.txt"
+.PHONY:_ci_zip
+_ci_zip:
+	$(_V)zip -9j "$(OUTPUT_DISK_IMAGE_STEM).zip" "$(OUTPUT_DISK_IMAGE_STEM).ssd" "$(OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(OUTPUT_DISK_IMAGE_STEM).ads" "$(OUTPUT_DISK_IMAGE_STEM).adm" "$(OUTPUT_DISK_IMAGE_STEM).adl" "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" "$(GP_OUTPUT_DISK_IMAGE_STEM).40.ssd" "$(GP_OUTPUT_DISK_IMAGE_STEM).ads" "$(GP_OUTPUT_DISK_IMAGE_STEM).adm" "$(GP_OUTPUT_DISK_IMAGE_STEM).adl" "$(BUILD)/README.txt"
 
 # If testing ci_build locally, ci_clean will remove all the junk it
 # produces - along with anything else that matches the not very

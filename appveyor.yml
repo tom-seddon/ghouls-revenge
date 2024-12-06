@@ -32,10 +32,6 @@ artifacts:
     name: versioned-zip
   - path: $(GHOULS_REVENGE_BUILD_SUFFIXED_STEM).zip
     name: build-suffixed-zip
-  - path: $(GHOULS_PARTY_VERSIONED_STEM).zip
-    name: party-versioned-zip
-  - path: $(GHOULS_PARTY_BUILD_SUFFIXED_STEM).zip
-    name: party-build-suffixed-zip
 
 deploy:
   - release: $(GHOULS_REVENGE_RELEASE_NAME)
@@ -45,6 +41,6 @@ deploy:
     provider: GitHub
     auth_token:
       secure: 4W5gLh9wP/h+mqHPWAnfkq+TdLFmrzC926Z1KZSM8A4HSkZ2bzS+cP/RAUkm9Qao
-    artifact: versioned-zip,build-suffixed-zip,party-versioned-zip,party-build-suffixed-zip
+    artifact: versioned-zip,build-suffixed-zip
     draft: false
     prerelease: false
