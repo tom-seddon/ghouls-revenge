@@ -115,6 +115,8 @@ or complete the level. If you beat the previous time, enter your name
 RETURN, and your score will be immortalized on disk. Until it's beaten
 again, at least...
 
+(Press `V` on the main menu to display the version number.)
+
 ## Printing times
 
 To print the current times to a text file, run the BASIC program

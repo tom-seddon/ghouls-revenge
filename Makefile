@@ -1,10 +1,6 @@
 ##########################################################################
 ##########################################################################
 
-# 64tass's -D option seems to be for numbers only. So, the minor
-# version is 2 digits. Leading 0s are inserted as required.
-#
-# So major=0 minor=1 (say) means version 0.01.
 VERSION_MAJOR:=1
 VERSION_MINOR:=04
 
@@ -70,6 +66,12 @@ TASS:=64tass
 BASICTOOL:=$(PWD)/submodules/basictool/basictool
 ZX02:=$(PWD)/submodules/zx02/build/zx02
 endif
+
+##########################################################################
+##########################################################################
+
+# A Python expression - False or True 
+GPARTY_CHEAT:=False
 
 ##########################################################################
 ##########################################################################
@@ -143,9 +145,9 @@ endif
 	$(_V)echo V$(VERSION_MAJOR).$(VERSION_MINOR) >> "$(GP_BUILD)/$$.!BOOT"
 	$(_V)echo Build ID: $(GHOULS_REVENGE_BUILD_SUFFIX) >> "$(GP_BUILD)/$$.!BOOT"
 	$(_V)$(PYTHON) "$(BEEB_BIN)/text2bbc.py" "$(GP_BUILD)/$$.!BOOT"
-	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/GPMC.symbols" "" -o "$(BUILD)/gparty.bas" "src/gparty.bas"
+	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/GPMC.symbols" "" -o "$(BUILD)/gparty.bas" -Dversion="$(VERSION_MAJOR).$(VERSION_MINOR)" -Dcheat=$(GPARTY_CHEAT) "src/gparty.bas"
 	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty.bas" "$(BUILD)/$$.GPARTY"
-	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/GPMC.symbols" "" --asm-symbols "$(BUILD)/party_stuff.symbols" "" -o "$(BUILD)/gparty_loader.bas" "src/gparty_loader.bas"
+	$(_V)$(PYTHON) "$(BIN)/bbpp.py" --asm-symbols "$(BUILD)/GPMC.symbols" "" --asm-symbols "$(BUILD)/party_stuff.symbols" "" -o "$(BUILD)/gparty_loader.bas" -Dcheat=$(GPARTY_CHEAT) "src/gparty_loader.bas"
 	$(_V)$(BASICTOOL) --tokenise --basic-2 --output-binary "$(BUILD)/gparty_loader.bas" "$(BUILD)/$$.GPLOAD"
 	$(_V)$(MAKE) _party_disk_images
 
@@ -174,7 +176,7 @@ _party_stuff:
 	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --s65-output "$(BUILD)/party_levels.generated.s65" --scores-output "$(GP_BUILD)/$$.GPTIMES" --symbols-output "$(BUILD)/party_stuff.symbols" --metadata-output "$(BUILD)/party_stuff.json" $(_LEVELS)
 
 .PHONY:_party_disk_images
-_party_disk_images: _FILES:="$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY" "$(BUILD)/$$.README" "$(BUILD)/$$.GPMETA" "$(BEEB_VOLUME)/2/$$.TPRINT" "$(BEEB_VOLUME)/2/$$.TMERGE" "$(GP_BUILD)/$$.BTIMES"
+_party_disk_images: _FILES:="$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY" "$(BUILD)/$$.README" "$(BUILD)/$$.GPMETA" "$(BEEB_VOLUME)/2/$$.TPRINT" "$(BEEB_VOLUME)/2/$$.TMERGE" "$(GP_BUILD)/$$.BTIMES"
 _party_disk_images: _SSD_OPTIONS:=--title "GHOULS P" --opt4 3 --must-exist
 _party_disk_images: _ADF_OPTIONS:=--title "GHOULS PARTY" --opt4 3
 _party_disk_images:
