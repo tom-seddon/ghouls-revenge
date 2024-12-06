@@ -131,10 +131,12 @@ The output will be shown on screen, and also saved to a file called
 ## Best times files
 
 Best times are saved to a file called `GPTIMES`, which you can back up
-or send to people. Best time files are specific to a particular Ghouls
-Party build, and can't be freely mixed - but you can use the BASIC
-program `TMERGE` on the Ghouls Party disk to merge times from from
-another best times file into yours.
+or send to people. Use the BASIC program `TMERGE` on the Ghouls Party
+disk to merge somebody else's best times file into yours. (It's safest
+to do this rather than using a copy of somebody else's file directly.
+Ghouls Party doesn't promise to work properly with other people's
+score files, but the merge program will. You'll also get to keep any
+times of yours that are better than theirs...)
 
     CHAIN"TMERGE"
 
