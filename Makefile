@@ -138,6 +138,7 @@ endif
 	$(_V)$(MAKE) _party_stuff
 	$(_V)$(MAKE) _asm PC=gmc BEEB=GPMC "TASS_EXTRA_ARGS=-Deditor=false -Dparty=true"
 	$(_V)$(MAKE) _asm PC=gparty_setup BEEB=GPSETUP
+	$(_V)$(MAKE) _asm PC=../build/party_levels.generated BEEB=GPMETA
 	$(_V)$(SHELLCMD) copy-file "src/gparty_boot.txt" "$(GP_BUILD)/$$.!BOOT"
 	$(_V)echo V$(VERSION_MAJOR).$(VERSION_MINOR) >> "$(GP_BUILD)/$$.!BOOT"
 	$(_V)echo Build ID: $(GHOULS_REVENGE_BUILD_SUFFIX) >> "$(GP_BUILD)/$$.!BOOT"
@@ -173,10 +174,11 @@ _party_stuff:
 	$(_V)$(PYTHON) "$(BIN)/make_party_stuff.py" $(if $(VERBOSE),--verbose,) --zx02 "$(ZX02)" --zx02-cache-path "$(BUILD)/zx02_cache" --rom-output-stem "$(BUILD)/\$$.GPARTY" --s65-output "$(BUILD)/party_levels.generated.s65" --scores-output "$(GP_BUILD)/$$.GPTIMES" --symbols-output "$(BUILD)/party_stuff.symbols" --metadata-output "$(BUILD)/party_stuff.json" $(_LEVELS)
 
 .PHONY:_party_disk_images
-_party_disk_images: _FILES:="$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY" "$(BUILD)/$$.README"
+_party_disk_images: _FILES:="$(GP_BUILD)/$$.GPTIMES" "$(GP_BUILD)/$$.!BOOT" "$(BUILD)/$$.GPLOAD" "$(BUILD)/$$.GPARTY0" "$(BUILD)/$$.GPSETUP" "$(BUILD)/$$.GPMC" "$(BUILD)/$$.GPARTY" "$(BUILD)/$$.README" "$(BUILD)/$$.GPMETA" "$(BEEB_VOLUME)/2/$$.TPRINT" "$(BEEB_VOLUME)/2/$$.TMERGE" "$(GP_BUILD)/$$.BTIMES"
 _party_disk_images: _SSD_OPTIONS:=--title "GHOULS P" --opt4 3 --must-exist
 _party_disk_images: _ADF_OPTIONS:=--title "GHOULS PARTY" --opt4 3
 _party_disk_images:
+	$(_V)$(SHELLCMD) copy-file "$(BEEB_VOLUME)/2/6.TI251108" "$(GP_BUILD)/$$.BTIMES"
 	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).ssd" $(_SSD_OPTIONS) $(_FILES)
 	$(_V)$(PYTHON) "$(BEEB_BIN)/ssd_create.py" -o "$(GP_OUTPUT_DISK_IMAGE_STEM).40.ssd" $(_SSD_OPTIONS) --40 $(_FILES)
 

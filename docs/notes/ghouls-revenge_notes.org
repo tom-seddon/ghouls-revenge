@@ -1059,8 +1059,51 @@ not...
 :  1. XX.XX XYZ 2. XX.XX XYZ
 :  3. XX.XX XYZ 4. XX.XX XYZ
 
-* Ghouls Party Notes
+** Score tool screen
 
+Max 16 level sets
+4 levels per set - max 17 chars for each name
+old/new scores
+
+40 column view:
+
+#+begin_example
+  0         1         2         3         4         5         6         7
+  01234567890123456789012345678901234567890123456789012345678901234567890123456789
+  A. LEVEL SET NAME HERE
+     1. 0123456789ABCDEF0 99.99' ABCDEF
+                     New: 99.99' ABCDEF
+#+end_example
+
+9 rows per level set
+
+3 level sets/screen in mode 4
+
+80 column view:
+
+#+begin_example
+  0         1         2         3         4         5         6         7
+  01234567890123456789012345678901234567890123456789012345678901234567890123456789
+  A. 0123456789012345678901234567890
+     1. 0123456789ABCDEF0  Was: 99.99' ABCDEF  Now: 99.99' ABCDEF
+#+end_example
+
+5 rows per level set
+
+4 sets/screen in mode 3
+6 sets/screen in mode 0
+
+
+* Ghouls Party Notes
+* 50 Hz keys
+
+
+| Prev | This | Old | New |
+|------+------+-----+-----|
+|    0 |    0 |   0 |   0 |
+|    0 |    1 |   1 |   1 |
+|    1 |    0 |   0 |   1 |
+|    1 |    1 |   1 |   1 |
 
 
 * .dir-locals.el
