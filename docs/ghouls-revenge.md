@@ -13,7 +13,8 @@ level editor to devise fresh torments.
 
 Then, for a completely fresh take on the Ghouls experience, try the
 all-new Ghouls Party! Race through any level of your choice to beat
-the best time. Scores are saved to disk and best times are shareable.
+the best time. Best times are saved to disk and best times are
+shareable.
 
 # Running the game
 
@@ -96,9 +97,9 @@ testing your own levels or when modifying the code:
 Ghouls Party is a version of Ghouls: Revenge designed for kiosk/arcade
 cabinet type play at events or shows, or offline asynchronous
 competition. The only game mode is Time Attack, all level sets are
-permanently resident, scores are saved to disk so they are persistent
-between runs, and there's a BASIC tool for handling merging best
-scores from multiple sets of score files.
+permanently resident, best times are saved to disk so they are
+persistent between runs, and there's a BASIC tool for handling merging
+best times from multiple sets of best time files.
 
 As well as the system requirements for Ghouls Revenge, and Ghouls
 Party also requires 1 unoccupied 16 KB sideways RAM bank.
@@ -112,7 +113,7 @@ in that set, then press the level number to play that level.
 Play repeats until you press ESCAPE (taking you back to the main menu)
 or complete the level. If you beat the previous time, enter your name
 (6 chars - any of letters, numbers, space, `-`, `?` and `!`), press
-RETURN, and your score will be immortalized on disk. Until it's beaten
+RETURN, and your time will be immortalized on disk. Until it's beaten
 again, at least...
 
 (Press `V` on the main menu to display the version number.)
@@ -127,19 +128,19 @@ To print the current times to a text file, run the BASIC program
 The output will be shown on screen, and also saved to a file called
 `GPTIMET` on the disk.
 
-## Score files
+## Best times files
 
-Scores are saved to a file called `GPTIMES`, which you can back up or
-send to people. Score files are specific to a particular Ghouls Party
-build, and can't be freely mixed - but you can use the BASIC program
-`TMERGE` on the Ghouls Party disk to merge scores from another score
-file into yours.
+Best times are saved to a file called `GPTIMES`, which you can back up
+or send to people. Best time files are specific to a particular Ghouls
+Party build, and can't be freely mixed - but you can use the BASIC
+program `TMERGE` on the Ghouls Party disk to merge times from from
+another best times file into yours.
 
     CHAIN"TMERGE"
 
 You'll be asked to specify the name of a file to load. If using DFS,
 simply swap to another Ghouls Party disk and enter `GPTIMES` to load
-its scores; otherwise, you can enter * commands by entering something
+its best times; otherwise, you can enter * commands by entering something
 beginning with `*`. (For example, with ADFS, you'll need to do the
 usual `*MOUNT` business.)
 
@@ -147,30 +148,31 @@ Once the file has loaded, you'll be prompted to reinsert the Ghouls
 Party disk and enter `Y`. Again, you can enter * commands by entering
 something beginning with `*`.
 
-You'll then see each level set in turn, with each level's current
-score, and the score found (if any) for it in the other scores file.
-The other score will be merged across if it's quicker, or not if it's
-slower or the same.
+You'll then see each level set in turn, with each level's current best
+time, and the best time found (if any) for it in the other best times
+file. The other best time will be merged across if it's quicker, or
+not if it's slower or the same.
 
 If you see the message `No record for this level found`, this level
-has no match in the levels in the other score file, probably because
-the level data has since changed (rendering the original time
+has no match in the levels in the other best times file, probably
+because the level data has since changed (rendering the original time
 invalid).
 
 Press `SPACE` to accept the result - this is usually what you want -
-or toggle the merge status of each score with keys `1` to `4`.
+or toggle the merge status of each best time with keys `1` to `4`.
 
-Once you've gone through all the level sets, the merged scores file
-will be saved to `GPTIMES` on disk.
+Once you've gone through all the level sets, the merged best times
+file will be saved to `GPTIMES` on disk.
 
 A backup of the old file can be found in `GPTIMEB`.
 
-## Bitshifters' Best Times
+## Bitshifters' best times
 
 Our own set of best times can be found in the file `BTIMES`, for
-merging into your own score file if you fancy trying to beat them!
+merging into your own best times file if you fancy trying to beat
+them!
 
-NOTE: these scores were obtained using a prerelease version of the
+NOTE: these times were obtained using a prerelease version of the
 game, with older versions of some levels. You may see `No record for
 this level found` messages when merging.
 
