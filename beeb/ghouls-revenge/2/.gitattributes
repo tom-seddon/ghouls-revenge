@@ -3,3 +3,4 @@ $.GRMENUSCR diff=bbcbasic
 $.GPRAM diff=bbcbasic
 $.TPRINT diff=bbcbasic
 $.TMERGE diff=bbcbasic
+$.37X27 diff=bbcbasic
