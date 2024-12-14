@@ -5,28 +5,11 @@ party=true
                 .dsection code
                 .cerror *>$7c00
 
+                ; This stuff could really do with moving into GPMC or
+                ; GPLOADER.
+
                 .section code
 main:
-                ; disable shadow RAM
-                lda #114
-                ldx #1
-                ldy #0
-                jsr osbyte
-
-                ;
-                lda #$ea
-                ldx #$00
-                ldy #$ff
-                jsr osbyte
-                cpx #$00
-                beq copro_ok
-
-                brk
-                .byte 255
-                .text 'Not compatible with a second processor'
-                brk
-
-copro_ok:
                 jsr define_udgs
 
                 ldx #<load_gpmc
