@@ -1,6 +1,10 @@
 Ghouls: Revenge
 ===============
 
+For instructions, please see the README on GitHub:
+
+https://github.com/tom-seddon/ghouls-revenge/blob/main/docs/ghouls-revenge.md
+
 GitHub
 ======
 
