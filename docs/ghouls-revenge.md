@@ -101,8 +101,8 @@ permanently resident, best times are saved to disk so they are
 persistent between runs, and there's a BASIC tool for handling merging
 best times from multiple sets of best time files.
 
-As well as the system requirements for Ghouls Revenge, and Ghouls
-Party also requires 1 unoccupied 16 KB sideways RAM bank.
+As well as the system requirements for Ghouls Revenge, Ghouls Party
+also requires 1 unoccupied 16 KB sideways RAM bank.
 
 The Ghouls Party disk images are auto-booting. Just press SHIFT+BREAK.
 There's no title screen - the main menu will appear shortly, listing
@@ -140,11 +140,9 @@ times of yours that are better than theirs...)
 
     CHAIN"TMERGE"
 
-You'll be asked to specify the name of a file to load. If using DFS,
-simply swap to another Ghouls Party disk and enter `GPTIMES` to load
-its best times; otherwise, you can enter * commands by entering something
-beginning with `*`. (For example, with ADFS, you'll need to do the
-usual `*MOUNT` business.)
+You'll be asked to specify the name of a file to load. You can also
+enter a * command by entering something beginning with `*`. (You'll
+need this with ADFS if swapping disks.)
 
 Once the file has loaded, you'll be prompted to reinsert the Ghouls
 Party disk and enter `Y`. Again, you can enter * commands by entering
@@ -175,8 +173,9 @@ merging into your own best times file if you fancy trying to beat
 them!
 
 NOTE: these times were obtained using a prerelease version of the
-game, with older versions of some levels. You may see `No record for
-this level found` messages when merging.
+game, with older versions of some levels. It's expected that you'll
+see `No record for this level found` messages when merging. (Look on
+the bright side: you'll find it a bit easier to set a new record...)
 
 # Credits
 
