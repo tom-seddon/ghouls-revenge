@@ -2,7 +2,7 @@
 ##########################################################################
 
 VERSION_MAJOR:=1
-VERSION_MINOR:=05
+VERSION_MINOR:=10
 
 # 20241015-000458-90730ec
 # local
@@ -316,7 +316,6 @@ _tom_laptop:
 	-curl --connect-timeout 0.25 --silent -G 'http://localhost:48075/reset/b2' --data-urlencode "config=$(CONFIG)"
 #	-curl --connect-timeout 0.25 --silent -H 'Content-Type:application/binary' --upload-file '$(OUTPUT_DISK_IMAGE_STEM).ssd' 'http://localhost:48075/run/b2?name=$(OUTPUT_DISK_IMAGE_STEM).ssd'
 	-curl --connect-timeout 0.25 --silent -H 'Content-Type:application/binary' --upload-file '$(GP_OUTPUT_DISK_IMAGE_STEM).ssd' 'http://localhost:48075/run/b2?name=$(GP_OUTPUT_DISK_IMAGE_STEM).ssd'
-
 
 .PHONY:_tom_windows_laptop
 _tom_windows_laptop: CONFIG=B/Acorn 1770 + BeebLink
