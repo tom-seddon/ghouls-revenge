@@ -27,7 +27,7 @@ IFHIGH=1:PROCHIGHSCORE:HIGH=2:GOTO{$gparty_levels_ui_loop}
 G%=FNTOUPPER(GET)
 IFSSET>=0ANDG%>=ASC"1"ANDG%<=ASC"4":LEVEL=SSET*4+G%-ASC"1":GOTO{$gparty_game}
 IFG%>=ASC"A"ANDG%<ASC"A"+?{&num_level_sets}:SSET=G%-ASC"A"
-IFG%=ASC"V":PRINTTAB(33,0)CHR$140CHR$135"V{$version}";
+IFG%=ASC"V":PRINTTAB(33,0)CHR$140CHR$135"V{$"%.02f"%version}";
 GOTO{$gparty_levels_ui_loop}
 {:gparty_game}
 PLAYED=FALSE
